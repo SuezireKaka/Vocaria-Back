@@ -1,2 +1,2 @@
 # Vocaria-Back
-Vocarira의 백엔드
+Vocaria의 백엔드
