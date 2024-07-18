@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.voca.ria.vocabulary.mapper.VocaMapper">
+	<resultMap id="rmWordVO" type="www.voca.ria.vocabulary.model.WordVO">
+		<result property="name" column="name" />
+		<result property="parsed" column="parsed" />
+	</resultMap>
+	
+	
+	<!-- public List<WordVO> listWordsOfNumber(int choiceNum); -->
+	<select id="listWordsOfNumber" resultMap="rmWordVO">
+		select wd.*
+		  from t_word wd
+		 order by rand()
+		 limit ${choiceNum}
+	</select>
+</mapper>
