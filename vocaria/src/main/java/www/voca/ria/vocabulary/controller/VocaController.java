@@ -17,7 +17,7 @@ public class VocaController {
 	@Autowired
 	private VocaService vocaService;
 
-	// /bible/anonymous/getRandomQuestion/5
+	// /voca/anonymous/getRandomQuestion/5
 	@GetMapping("/anonymous/getRandomQuestion/{choiceNum}")
 	public ResponseEntity<QuestionDTO> getRandomQuestion(@PathVariable int choiceNum) {
 		QuestionDTO result = vocaService.getRandomQuestion(choiceNum);

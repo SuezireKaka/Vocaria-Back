@@ -15,6 +15,6 @@
 		select wd.*
 		  from t_word wd
 		 order by rand()
-		 limit ${choiceNum}
+		 limit ${choiceNum};
 	</select>
 </mapper>
