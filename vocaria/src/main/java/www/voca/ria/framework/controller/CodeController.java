@@ -1,7 +1,5 @@
 package www.voca.ria.framework.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import www.voca.ria.framework.model.CodeVO;
+import www.voca.ria.framework.model.form.FormVO;
 import www.voca.ria.framework.model.remocon.RemoconVO;
 import www.voca.ria.framework.service.CodeService;
 
@@ -20,11 +18,11 @@ public class CodeController {
 	@Autowired
 	private CodeService codeService;
 	
-	// /framework/anonymous/listAllFormOf/register
-	@GetMapping("/anonymous/listAllFormOf/{purpose}")
-	public ResponseEntity<List<CodeVO>> listAll(String purpose) {
-		List<CodeVO> list = codeService.listAll();
-		return new ResponseEntity<>(list, HttpStatus.OK);
+	// /framework/anonymous/getFormFor/register
+	@GetMapping("/anonymous/getFormFor/{purpose}")
+	public ResponseEntity<FormVO> getFormFor(String purpose) {
+		FormVO form = codeService.getFormFor(purpose);
+		return new ResponseEntity<>(form, HttpStatus.OK);
 	}
 	
 	// /framework/anonymous/getRemoconByName/remocon

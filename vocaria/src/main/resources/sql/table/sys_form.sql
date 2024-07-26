@@ -4,6 +4,6 @@ create table sys_form(
 	title			varchar(255),
 	type			varchar(16),
 	valid_regex		varchar(255),
-	uniqe			tinyint,
+	uniq			tinyint,
 	primary key(purpose, pos)
 );

@@ -10,7 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import www.voca.ria.framework.model.PagingDTO;
+import www.voca.ria.framework.model.structure.PagingDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.mapper.PartyMapper;
 import www.voca.ria.party.model.AccountVO;

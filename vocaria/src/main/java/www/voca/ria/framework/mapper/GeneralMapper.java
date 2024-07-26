@@ -3,7 +3,7 @@ package www.voca.ria.framework.mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-public interface WonderMapper {
+public interface GeneralMapper {
 	@Select("SELECT FOUND_ROWS()")
 	public long getFoundRows();
 	
