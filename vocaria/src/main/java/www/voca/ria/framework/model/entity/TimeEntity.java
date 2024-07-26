@@ -1,4 +1,4 @@
-package www.voca.ria.framework.model;
+package www.voca.ria.framework.model.entity;
 
 import java.util.Date;
 

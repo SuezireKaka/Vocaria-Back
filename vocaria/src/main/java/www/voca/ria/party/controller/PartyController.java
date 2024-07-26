@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import www.voca.ria.framework.model.DreamPair;
 import www.voca.ria.framework.model.PagingDTO;
+import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.service.PartyService;
@@ -32,10 +32,10 @@ public class PartyController {
 	// /party/listAllAccount/0000/1
 	@GetMapping("/listAllAccount/{ownerId}/{page}/{orderColumn}")
 	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
-	public ResponseEntity<DreamPair<List<AccountVO>, PagingDTO>> listAllAccount(
+	public ResponseEntity<Pair<List<AccountVO>, PagingDTO>> listAllAccount(
 			@AuthenticationPrincipal AccountVO manager, @PathVariable String ownerId, @PathVariable int page,
 			@PathVariable String orderColumn) {
-		DreamPair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
+		Pair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

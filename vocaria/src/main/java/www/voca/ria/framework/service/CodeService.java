@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import www.voca.ria.framework.mapper.CodeMapper;
 import www.voca.ria.framework.model.CodeVO;
-import www.voca.ria.framework.model.RemoconVO;
+import www.voca.ria.framework.model.remocon.RemoconVO;
 
 @Service
 public class CodeService {

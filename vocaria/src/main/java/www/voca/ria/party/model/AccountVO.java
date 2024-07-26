@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import www.voca.ria.framework.model.TimeEntity;
+import www.voca.ria.framework.model.entity.TimeEntity;
 
 @Getter
 @SuperBuilder

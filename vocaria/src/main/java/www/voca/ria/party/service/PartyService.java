@@ -10,8 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import www.voca.ria.framework.model.DreamPair;
 import www.voca.ria.framework.model.PagingDTO;
+import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.mapper.PartyMapper;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.party.model.ContactPointVO;
@@ -31,7 +31,7 @@ public class PartyService implements UserDetailsService {
 	private PasswordEncoder pswdEnc;
 	
 	/** 회사의 모든 계정 조회 */ 
-	public DreamPair<List<AccountVO>, PagingDTO> listAllAccount(String ownerId, int page) {
+	public Pair<List<AccountVO>, PagingDTO> listAllAccount(String ownerId, int page) {
 		PagingDTO paging = new PagingDTO(page);
 		List<AccountVO> listResult = partyMapper.listAllAccount(ownerId, paging);
 		
@@ -44,7 +44,7 @@ public class PartyService implements UserDetailsService {
 		long dataCount = partyMapper.getFoundRows();
 		paging.buildPagination(dataCount);
 
-		return new DreamPair<List<AccountVO>, PagingDTO>(listResult, paging);
+		return new Pair<List<AccountVO>, PagingDTO>(listResult, paging);
 	}
 	
 	public AccountVO findById(String id) {

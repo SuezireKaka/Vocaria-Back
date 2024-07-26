@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import www.voca.ria.framework.model.CodeVO;
-import www.voca.ria.framework.model.RemoconVO;
+import www.voca.ria.framework.model.remocon.RemoconVO;
 
 @Mapper		//Container에 담기도록 지정
 public interface CodeMapper {

@@ -1,15 +1,15 @@
-package www.voca.ria.framework.model;
+package www.voca.ria.framework.model.structure;
 
 /**
  * Type이 달라도 정보 쌍을 담을 수 있는 그릇
  * @param <F>
  * @param <S>
  */
-public class DreamPair<F, S> {
+public class Pair<F, S> {
 	private F firstVal;
 	private S secondVal;
 	
-	public DreamPair(F firstVal, S secondVal) {
+	public Pair(F firstVal, S secondVal) {
 		this.firstVal = firstVal;
 		this.secondVal = secondVal;
 	}

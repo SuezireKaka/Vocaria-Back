@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.voca.ria.framework.model.CodeVO;
-import www.voca.ria.framework.model.RemoconVO;
+import www.voca.ria.framework.model.remocon.RemoconVO;
 import www.voca.ria.framework.service.CodeService;
 
 @RestController		//Container에 담기도록 지정
@@ -20,9 +20,9 @@ public class CodeController {
 	@Autowired
 	private CodeService codeService;
 	
-	// /framework/anonymous/listAllContactPointType
-	@GetMapping("/anonymous/listAllContactPointType")
-	public ResponseEntity<List<CodeVO>> listAll() {
+	// /framework/anonymous/listAllFormOf/register
+	@GetMapping("/anonymous/listAllFormOf/{purpose}")
+	public ResponseEntity<List<CodeVO>> listAll(String purpose) {
 		List<CodeVO> list = codeService.listAll();
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}

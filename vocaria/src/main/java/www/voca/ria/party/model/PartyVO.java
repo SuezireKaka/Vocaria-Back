@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import www.voca.ria.framework.model.Entity;
+import www.voca.ria.framework.model.entity.Entity;
 
 @Getter
 @SuperBuilder
