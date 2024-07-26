@@ -10,11 +10,16 @@
 	</resultMap>
 	
 	
-	<!-- public List<WordVO> listWordsOfNumber(int choiceNum); -->
-	<select id="listWordsOfNumber" resultMap="rmWordVO">
+	<!-- public List<WordVO> listRandomWordsOfNumber(int choiceNum); -->
+	<select id="listRandomWordsOfNumber" resultMap="rmWordVO">
 		select wd.*
 		  from t_word wd
 		 order by rand()
 		 limit ${choiceNum};
 	</select>
+	
+	<!-- public int buildSecretQuestion(); -->
+	<insert id="buildSecretQuestion">
+		
+	</insert>
 </mapper>

@@ -15,7 +15,10 @@ public class VocaService {
 	private VocaMapper vocaMapper;
 
 	public QuestionDTO getRandomQuestion(int choiceNum) {
-		List<WordVO> wordList = vocaMapper.listWordsOfNumber(choiceNum);
+		List<WordVO> wordList = vocaMapper.listRandomWordsOfNumber(choiceNum);
+		
+		vocaMapper.buildSecretQuestion();
+		
 		return new QuestionDTO(wordList);
 	}
 	

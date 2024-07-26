@@ -8,6 +8,8 @@ import www.voca.ria.vocabulary.model.WordVO;
 
 @Mapper
 public interface VocaMapper {
-	public List<WordVO> listWordsOfNumber(int choiceNum);
+	public List<WordVO> listRandomWordsOfNumber(int choiceNum);
+
+	public int buildSecretQuestion();
 
 }
