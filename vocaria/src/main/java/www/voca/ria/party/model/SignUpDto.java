@@ -8,4 +8,5 @@ import lombok.Data;
 public class SignUpDto {
 	private String name;
 	private Date birthDate;
+	
 }

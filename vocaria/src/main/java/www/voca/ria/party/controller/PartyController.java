@@ -29,6 +29,7 @@ public class PartyController {
 	@Autowired
 	private PartyService partyService;
 
+	/*
 	// /party/listAllAccount/0000/1
 	@GetMapping("/listAllAccount/{ownerId}/{page}/{orderColumn}")
 	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
@@ -37,6 +38,15 @@ public class PartyController {
 			@PathVariable String orderColumn) {
 		Pair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	*/
+	
+	// /party/speltest
+	@GetMapping("/speltest")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'UT')")
+	public ResponseEntity<String> speltest(@AuthenticationPrincipal AccountVO owner, @PathVariable String memberId,
+			@PathVariable String role) {
+		return ResponseEntity.ok("SpEL 성공적");
 	}
 
 	// /party/findById/0003
@@ -59,6 +69,7 @@ public class PartyController {
 		return ResponseEntity.ok(partyService.checkNick(nick));
 	}
 
+	/*
 	// /party/anonymous/createMember
 	@PostMapping("/anonymous/createMember")
 	public ResponseEntity<Integer> createMember(@RequestBody SignUpDto signUpRequest) {
@@ -72,6 +83,7 @@ public class PartyController {
 			@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
 	}
+	*/
 
 	// /party/reRole
 	@GetMapping("/reRole/{memberId}/{role}")
