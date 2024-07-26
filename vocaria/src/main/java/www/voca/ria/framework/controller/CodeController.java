@@ -20,7 +20,7 @@ public class CodeController {
 	
 	// /framework/anonymous/getFormFor/register
 	@GetMapping("/anonymous/getFormFor/{purpose}")
-	public ResponseEntity<FormVO> getFormFor(String purpose) {
+	public ResponseEntity<FormVO> getFormFor(@PathVariable String purpose) {
 		FormVO form = codeService.getFormFor(purpose);
 		return new ResponseEntity<>(form, HttpStatus.OK);
 	}

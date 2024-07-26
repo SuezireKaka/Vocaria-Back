@@ -1,4 +1,4 @@
-insert into sys_form(purpose, pos, title, type, valid_regex, uniq)
+insert into sys_form(purpose, level, input_title, input_type, input_valid_regex, input_unique)
 values ('register', 0, '이름', 'text', '^.{,255}$', 0),
 ('register', 1, '생년월일', 'date', null, 0),
 ('register', 2, '아이디', 'text', '^[A-Za-z0-9]{8,30}$', 1),

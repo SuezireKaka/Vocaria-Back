@@ -9,7 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FormVO {
 	private String purpose;
-	private List<InputPieceVO> pieceList;
-	
-	
+	private List<InputPieceVO> inputPieceList;	
 }
