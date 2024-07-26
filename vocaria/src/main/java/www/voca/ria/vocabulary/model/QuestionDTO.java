@@ -1,16 +1,17 @@
 package www.voca.ria.vocabulary.model;
 
 import java.util.List;
+import java.util.Random;
 
 import lombok.Getter;
 
 @Getter
 public class QuestionDTO {
-	private WordVO answer;
-	private List<WordVO> wrongList;
+	private int answer;
+	private List<WordVO> choiseList;
 	
 	public QuestionDTO(List<WordVO> wordList) {
-		this.answer = wordList.remove(0);
-		this.wrongList = wordList;
+		this.answer = new Random().nextInt(wordList.size());
+		this.choiseList = wordList;
 	}
 }
