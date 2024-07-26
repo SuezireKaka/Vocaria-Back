@@ -2,7 +2,6 @@ package www.voca.ria.party.model;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import www.voca.ria.framework.model.entity.TimeEntity;
+import www.voca.ria.party.model.role.RoleVO;
 
 @Getter
 @SuperBuilder
@@ -25,7 +25,7 @@ public class AccountVO extends TimeEntity implements UserDetails {
 	private String passWord;
 	
 	private PersonVO owner;
-	private OrganizationVO provider;
+	private GroupVO provider;
 	
 	private String nick;
 	private String introduction;
@@ -37,9 +37,7 @@ public class AccountVO extends TimeEntity implements UserDetails {
 	}
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roleList.stream()
-				.map(RoleVO::getAuthority)
-				.collect(Collectors.toList());
+		return this.roleList;
 	}
 
 	public String getPassword() {

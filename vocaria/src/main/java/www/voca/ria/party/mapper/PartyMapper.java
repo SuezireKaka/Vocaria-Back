@@ -8,14 +8,13 @@ import org.apache.ibatis.annotations.Param;
 import www.voca.ria.framework.mapper.GeneralMapper;
 import www.voca.ria.framework.model.structure.PagingDTO;
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.party.model.ContactPointVO;
 import www.voca.ria.party.model.PersonVO;
 import www.voca.ria.party.model.RoleVO;
+import www.voca.ria.party.model.party.ContactPointVO;
 
 @Mapper
 public interface PartyMapper extends GeneralMapper {
 	public List<AccountVO> listAllAccount(@Param("ownerId") String ownerId, @Param("paging") PagingDTO paging);
-	public List<ContactPointVO> listAllCpOf(@Param("ownerId") String ownerId);
 	
 	public AccountVO findById(String id);
 	
@@ -28,8 +27,6 @@ public interface PartyMapper extends GeneralMapper {
 	public int createPerson(PersonVO person);
 	public int createAccount(AccountVO account);
 	public int createRole(@Param("account") AccountVO account, @Param("role") RoleVO role);
-	public int createAllCpOf(@Param("id") String id,
-			@Param("listContactPoint") List<ContactPointVO> listContactPoint);
 	
 	public int updatePerson(@Param("person") PersonVO person);
 	public int updateAccount(@Param("account") AccountVO account);

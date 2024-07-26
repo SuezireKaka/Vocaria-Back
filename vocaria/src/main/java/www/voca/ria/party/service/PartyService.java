@@ -14,12 +14,12 @@ import www.voca.ria.framework.model.structure.PagingDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.mapper.PartyMapper;
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.party.model.ContactPointVO;
-import www.voca.ria.party.model.OrganizationVO;
+import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.PartyVO;
 import www.voca.ria.party.model.PersonVO;
 import www.voca.ria.party.model.RoleVO;
 import www.voca.ria.party.model.SignUpDto;
+import www.voca.ria.party.model.party.ContactPointVO;
 
 
 @Service
@@ -78,7 +78,7 @@ public class PartyService implements UserDetailsService {
 				.passWord(signUpRequest.getPassWord())
 				.nick(signUpRequest.getNick())
 				.introduction(signUpRequest.getIntroduction())
-				.provider(OrganizationVO.BIBLARY_PROXY)
+				.provider(GroupVO.BIBLARY_PROXY)
 				.owner(person)
 				.build();
 		int cnt = 1;
