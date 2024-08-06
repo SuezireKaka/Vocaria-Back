@@ -12,8 +12,10 @@
 	</resultMap>
 	
 	<resultMap id="rmInputPieceVO" type="www.voca.ria.framework.model.form.InputPieceVO">
+		<result property="propName" column="prop" />
 		<result property="title" column="title" />
 		<result property="type" column="type" />
+		<result property="holder" column="holder"/>
 		<result property="validRegex" column="valid_regex" />
 		<result property="isUnique" column="unique" />
 	</resultMap>

@@ -7,7 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+
 public class FormVO {
 	private String purpose;
-	private List<InputPieceVO> inputPieceList;	
+	private List<InputPieceVO> inputPieceList;
+	
+	public void adjust() {
+		inputPieceList.stream().forEach(InputPieceVO::adjust);
+	}
 }

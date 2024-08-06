@@ -13,7 +13,10 @@ public class CodeService {
 	private CodeMapper codeMapper;
 
 	public FormVO getFormFor(String purpose) {
-		return codeMapper.getFormFor(purpose);
+		FormVO result = codeMapper.getFormFor(purpose);
+		result.adjust();
+		
+		return result;
 	}
 
 	public RemoconVO getRemoconByName(String name) {

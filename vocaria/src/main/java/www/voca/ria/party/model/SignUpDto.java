@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 public class SignUpDto {
 	private String name;
-	private Date birthDate;
-	
+	private Date birth;
+	private String loginId;
+	private String rawPassword;
+	private String nick;
+	private String introduce;
 }
