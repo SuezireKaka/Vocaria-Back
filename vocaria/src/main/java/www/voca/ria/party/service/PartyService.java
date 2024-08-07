@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import www.voca.ria.party.mapper.PartyMapper;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.party.model.PersonVO;
+import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.model.role.ActVO;
 import www.voca.ria.party.model.role.RoleVO;
 
@@ -28,10 +29,6 @@ public class PartyService implements UserDetailsService {
 		return res;
 	}
 	
-	public AccountVO findWriterByWorkIdFrom(String id, String table) {
-		return partyMapper.findWriterByWorkIdFrom(id, table);
-	}
-	
 	public RoleVO getRoleByProviderAndName(String providerId, String name) {
 		return partyMapper.getRoleByProviderAndName(providerId, name);
 	}
@@ -47,25 +44,29 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.isValidNick(nick);
 	}
 	
-	public int createPerson(PersonVO person) {
-		return partyMapper.createPerson(person);
-	}
-	
-	public int updateStatus(String memberId, String role) {
-		return partyMapper.updateStatus(memberId, role);
-	}
-	
-	public int reRole(String memberId, String loginResultCode) {
-		return partyMapper.reRole(memberId, loginResultCode);
+	public int manageMember(SignUpDto signUpRequest) {
+		PersonVO member = PersonVO.builder()
+				.name(signUpRequest.getName())
+				.birthDate(signUpRequest.getBirth())
+				.build();
+		
+		// 중복검사 어케 할 예정인?
+		
+		AccountVO account = AccountVO.builder()
+				.id(signUpRequest.getLoginId())
+				.passWord(pswdEnc.encode(signUpRequest.getRawPassword()))
+				.nick(signUpRequest.getNick())
+				.introduction(signUpRequest.getIntroduce())
+				.build();
+		
+		return 0;
+		//partyMapper.createPerson(member)
+			//	& partyMapper.createAccount(account);
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		return partyMapper.findById(id);
-	}
-
-	public int deleteMember(String id) {
-		return partyMapper.deleteMember(id);
 	}
 
 }

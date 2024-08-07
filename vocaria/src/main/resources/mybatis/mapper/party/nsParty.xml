@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.voca.ria.party.mapper.PartyMapper">
+	<resultMap id="rmPartyVO" extends="nsEntity.rmEntity"
+		type="www.voca.ria.party.model.PartyVO">
+		<result property="name" column="name" />
+		<result property="birthDate" column="birth" />
+		<discriminator javaType="String" column="discrim">
+			<case value="P" resultMap="rmPersonVO" />
+         	<case value="G" resultMap="rmGroupVO" />
+		</discriminator>
+	</resultMap>
+	
+	<resultMap id="rmGroupVO" extends="rmPartyVO"
+		type="www.voca.ria.party.model.GroupVO"/>
+	
+	<resultMap id="rmPersonVO" extends="rmPartyVO"
+		type="www.voca.ria.party.model.PersonVO"/>
+	
+	<resultMap id="rmAccountVO" extends="nsEntity.rmTimeEntity"
+		type="www.voca.ria.party.model.AccountVO">
+		<result property="passWord" column="pswd" />
+		<association property="owner" columnPrefix="own_"
+				resultMap="rmPersonVO" />
+		<collection property="roleList" columnPrefix="role_"
+			resultMap="rmRoleVO">
+		</collection>
+	</resultMap>
+	
+	<resultMap id="rmRoleVO" extends="nsEntity.rmEntity"
+		type="www.voca.ria.party.model.role.RoleVO">
+		<result property="name" column="name" />
+		<result property="info" column="info" />
+		<result property="isDefault" column="dflt" />
+		<association property="provider" columnPrefix="prov_"
+			resultMap="rmGroupVO"/>
+		<collection property="allowedActList" columnPrefix="act_"
+			resultMap="rmActVO">
+		</collection>
+	</resultMap>
+	
+	<resultMap id="rmActVO" type="www.voca.ria.party.model.role.ActVO">
+		<id property="act" column="act"/>
+		<result property="area" column="area" />
+		<result property="type" column="type" />
+		<result property="info" column="info" />
+	</resultMap>
+	
+	<!-- 	public List<RoleVO> listAllAnonymRoles(); -->
+	<select id="listAllAnonymRoles" resultMap="rmRoleVO">
+		select r.*,
+	        	prov.id prov_id, prov.discrim prov_discrim,
+	        	prov.name prov_name, prov.birth prov_birth,
+	    	    act.act act_act, act.area act_area,
+	    	    act.type act_type, act.info act_info
+		  from t_role r
+		  left outer join t_party prov
+		    on r.provider = prov.id
+		  left outer join rel_role_act allow
+		    on r.id = allow.role
+		  left outer join sys_act act
+		    on allow.act = act.act
+		 where act.area = 'Anonym'
+	</select>
+	
+	<!-- 	public List<RoleVO> listAllDefaultRolesOf(@Param("group") GroupVO group); -->
+	<select id="listAllDefaultRolesOf" resultMap="rmRoleVO">
+		select r.*,
+	        	prov.id prov_id, prov.discrim prov_discrim,
+	        	prov.name prov_name, prov.birth prov_birth,
+	    	    act.act act_act, act.area act_area,
+	    	    act.type act_type, act.info act_info
+		  from t_role r
+		  left outer join t_party prov
+		    on r.provider = prov.id
+		  left outer join rel_role_act allow
+		    on r.id = allow.role
+		  left outer join sys_act act
+		    on allow.act = act.act
+		 where r.provider = #{group.id}
+		   and r.dflt = 1;
+	</select>
+	
+	<!-- 	public AccountVO findById(String id); -->
+	<select id="findById" resultMap="rmAccountVO">
+		select acc.*,
+	        	own.id own_id, own.descrim own_descrim,
+	        	own.name own_name, own.birth own_birth,
+	        	role.id role_id, role.name role_name,
+	        	role.info role_info, role.dflt role_dflt,
+	        	prov.id role_prov_id, prov.descrim role_prov_descrim,
+	        	prov.name role_prov_name, prov.birth role_prov_birth,
+	        	act.act role_act_act, act.area role_act_area,
+	        	act.type role_act_type, act.info role_act_info
+		  from t_account acc
+		  left outer join t_party own
+		    on acc.owner = own.id
+		  left outer join rel_account_role allow
+		    on acc.id = allow.role
+		  left outer join t_role role
+		    on allow.role = role.id 
+		  left outer join t_party prov
+		    on role.provider = prov.id
+		  left outer join rel_role_act abt
+		    on role.id = abt.role
+		  left outer join sys_act act
+		    on abt.act = act.act
+		 where acc.id = #{id}
+	</select>
+	
+	<!-- 	public RoleVO getRoleByProviderAndName(String providerId, String name); -->
+	<select id="getRoleByProviderAndName" resultMap="rmRoleVO">
+		select role.*,
+	        	prov.id prov_id, prov.descrim prov_descrim,
+	        	prov.name prov_name, prov.birth prov_birth,
+	        	act.act act_act, act.area act_area,
+	        	act.type act_type, act.info act_info
+		  from t_role role
+		  left outer join t_party prov
+		    on role.provider = prov.id
+		  left outer join rel_role_act abt
+		    on role.id = abt.role
+		  left outer join sys_act act
+		    on abt.act = act.act
+		 where prov.id = #{providerId}
+		   and role.name = #{name}
+	</select>
+	
+	<!-- 	public ActVO getActByCode(String code); -->
+	<select id="getActByCode" resultMap="rmActVO">
+		select *
+		  from sys_act
+		 where act = #{code}
+	</select>
+	
+	<!-- 	public boolean isValidLoginId(String loginId); -->
+	<select id="isValidLoginId" resultType="boolean">
+		select count(*) = 0
+		  from t_account
+		 where id = binary(#{loginId})
+	</select>
+	
+	<!-- 	public boolean isValidNick(String nick); -->
+	<select id="isValidNick" resultType="boolean">
+		select count(*) = 0
+		  from t_account
+		 where nick = binary(#{nick})
+	</select>
+
+	<!-- public boolean createUser(@Param("user") UserVO user); 
+	<insert id="createUser">
+		insert into t_party(id, discrim, name, dis_id)
+		values(#{id}, 'U', #{name}, #{discordId});
+	</insert>-->
+	
+	<!-- public boolean grantRolesToUser(@Param("user") UserVO user,
+			@Param("rolesList") List<RoleVO> rolesList); 
+	<insert id="grantRolesToUser">
+		insert into rel_party_role (party, role)
+        select sub.*
+          from
+        <foreach open="(" collection="rolesList" item="role" separator=" union all " close=")">
+        	select
+        		#{user.id} as party,
+        		#{role.id} as role
+        </foreach> sub;
+	</insert>-->
+</mapper>

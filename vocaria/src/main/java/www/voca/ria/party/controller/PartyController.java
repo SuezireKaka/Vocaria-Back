@@ -8,10 +8,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import www.voca.ria.party.model.AccountVO;
+import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.service.PartyService;
 import www.voca.ria.security.anno.ForManagerOrSelf;
 
@@ -50,25 +53,26 @@ public class PartyController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	// /party/anonymous/checkLoginId?loginId=hgghg
-	@GetMapping("/anonymous/checkLoginId")
-	public ResponseEntity<Boolean> checkLoginId(String loginId) {
+	// /party/anonymous/check/loginId/addr
+	@GetMapping("/anonymous/check/loginId/{loginId}")
+	public ResponseEntity<Boolean> checkLoginId(@PathVariable String loginId) {
 		return ResponseEntity.ok(partyService.checkLoginId(loginId));
 	}
 
-	// /party/anonymous/checkNick?nick=hgghg
-	@GetMapping("/anonymous/checkNick")
-	public ResponseEntity<Boolean> checkNick(String nick) {
+	// /party/anonymous/check/nick/adfes
+	@GetMapping("/anonymous/check/nick/{nick}")
+	public ResponseEntity<Boolean> checkNick(@PathVariable String nick) {
 		return ResponseEntity.ok(partyService.checkNick(nick));
 	}
 
-	/*
+	
 	// /party/anonymous/createMember
 	@PostMapping("/anonymous/createMember")
 	public ResponseEntity<Integer> createMember(@RequestBody SignUpDto signUpRequest) {
-		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
+		return ResponseEntity.ok(partyService.manageMember(signUpRequest));
 	}
 
+	/*
 	// /party/updateMember
 	@PostMapping("/updateMember")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
@@ -76,7 +80,7 @@ public class PartyController {
 			@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
 	}
-	*/
+	
 
 	// /party/reRole
 	@GetMapping("/reRole/{memberId}/{role}")
@@ -100,5 +104,7 @@ public class PartyController {
 	public ResponseEntity<Integer> deleteMember(@AuthenticationPrincipal AccountVO owner, @PathVariable String id) {
 		return ResponseEntity.ok(partyService.deleteMember(id));
 	}
+	
+	*/
 
 }

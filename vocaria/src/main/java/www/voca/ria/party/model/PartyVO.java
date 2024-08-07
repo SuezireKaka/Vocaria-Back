@@ -16,5 +16,4 @@ import www.voca.ria.framework.model.entity.Entity;
 public class PartyVO extends Entity {	
 	private String name;
 	private Date birthDate; // 회사의 경우 설립일
-	private String introduce;
 }

@@ -15,6 +15,5 @@ public class GroupVO extends PartyVO {
 			.id("0000")
 			.build();
 	
-	private boolean isOpen;
 	private List<RoleVO> providingRoleList;
 }
