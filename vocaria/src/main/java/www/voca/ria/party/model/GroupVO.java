@@ -11,7 +11,7 @@ import www.voca.ria.party.model.role.RoleVO;
 @SuperBuilder
 @NoArgsConstructor
 public class GroupVO extends PartyVO {
-	public static final GroupVO JMEMO_PROXY = GroupVO.builder()
+	public static final GroupVO VOCARIA_PROXY = GroupVO.builder()
 			.id("0000")
 			.build();
 	

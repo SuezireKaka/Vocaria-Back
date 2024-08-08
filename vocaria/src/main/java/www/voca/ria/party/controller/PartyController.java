@@ -1,7 +1,6 @@
 package www.voca.ria.party.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.service.PartyService;
-import www.voca.ria.security.anno.ForManagerOrSelf;
 
 @RestController
 @CrossOrigin
@@ -43,14 +41,6 @@ public class PartyController {
 	public ResponseEntity<String> speltest(@AuthenticationPrincipal AccountVO owner, @PathVariable String memberId,
 			@PathVariable String role) {
 		return ResponseEntity.ok("SpEL 성공적");
-	}
-
-	// /party/findById/0003
-	@GetMapping("/findById/{id}")
-	@ForManagerOrSelf
-	public ResponseEntity<AccountVO> findById(@AuthenticationPrincipal AccountVO account, @PathVariable String id) {
-		AccountVO result = partyService.findById(id);
-		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	// /party/anonymous/check/loginId/addr

@@ -1,5 +1,7 @@
 package www.voca.ria.party.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import www.voca.ria.party.mapper.PartyMapper;
 import www.voca.ria.party.model.AccountVO;
+import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.PersonVO;
 import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.model.role.ActVO;
@@ -22,12 +25,6 @@ public class PartyService implements UserDetailsService {
 
 	@Autowired(required = false)
 	private PasswordEncoder pswdEnc;
-	
-	public AccountVO findById(String id) {
-		AccountVO res = partyMapper.findById(id);
-	
-		return res;
-	}
 	
 	public RoleVO getRoleByProviderAndName(String providerId, String name) {
 		return partyMapper.getRoleByProviderAndName(providerId, name);
@@ -45,7 +42,7 @@ public class PartyService implements UserDetailsService {
 	}
 	
 	public int manageMember(SignUpDto signUpRequest) {
-		PersonVO member = PersonVO.builder()
+		PersonVO person = PersonVO.builder()
 				.name(signUpRequest.getName())
 				.birthDate(signUpRequest.getBirth())
 				.build();
@@ -53,20 +50,24 @@ public class PartyService implements UserDetailsService {
 		// 중복검사 어케 할 예정인?
 		
 		AccountVO account = AccountVO.builder()
+				.owner(person)
 				.id(signUpRequest.getLoginId())
 				.passWord(pswdEnc.encode(signUpRequest.getRawPassword()))
 				.nick(signUpRequest.getNick())
 				.introduction(signUpRequest.getIntroduce())
 				.build();
 		
-		return 0;
-		//partyMapper.createPerson(member)
-			//	& partyMapper.createAccount(account);
+		List<RoleVO> defaultRoleList =
+				partyMapper.listAllDefaultRolesOf(GroupVO.VOCARIA_PROXY);
+		
+		return partyMapper.createPerson(person)
+			& partyMapper.createAccount(account)
+			& partyMapper.grantRolesToUser(account, defaultRoleList);
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-		return partyMapper.findById(id);
+		return partyMapper.getAccountById(id);
 	}
 
 }

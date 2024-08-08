@@ -69,7 +69,7 @@
 	<!-- 	public List<RoleVO> listAllDefaultRolesOf(@Param("group") GroupVO group); -->
 	<select id="listAllDefaultRolesOf" resultMap="rmRoleVO">
 		select r.*,
-	        	prov.id prov_id, prov.discrim prov_discrim,
+	        	prov.id prov_id, prov.descrim prov_descrim,
 	        	prov.name prov_name, prov.birth prov_birth,
 	    	    act.act act_act, act.area act_area,
 	    	    act.type act_type, act.info act_info
@@ -150,22 +150,32 @@
 		 where nick = binary(#{nick})
 	</select>
 
-	<!-- public boolean createUser(@Param("user") UserVO user); 
-	<insert id="createUser">
-		insert into t_party(id, discrim, name, dis_id)
-		values(#{id}, 'U', #{name}, #{discordId});
-	</insert>-->
+	<!-- public int createPerson(@Param("person") PersonVO person); -->
+	<insert id="createPerson">
+		<selectKey keyProperty="person.id" resultType="String"
+			order="BEFORE">
+			select NEXT_PK('s_party')
+		</selectKey>
+		insert into t_party(id, descrim, name, birth)
+		values(#{person.id}, 'P', #{person.name}, #{person.birthDate});
+	</insert>
 	
-	<!-- public boolean grantRolesToUser(@Param("user") UserVO user,
-			@Param("rolesList") List<RoleVO> rolesList); 
+	<!-- public int createAccount(@Param("account") AccountVO account);  -->
+	<insert id="createAccount">
+		insert into t_account(id, pswd, nick, intro, owner)
+		values(#{account.id}, #{account.passWord}, #{account.nick}, #{account.introduction}, #{account.owner.id});
+	</insert>
+	
+	<!-- public int grantRolesToUser(@Param("account") AccountVO account,
+			@Param("rolesList") List<RoleVO> rolesList); -->
 	<insert id="grantRolesToUser">
-		insert into rel_party_role (party, role)
+		insert into rel_account_role (account, role)
         select sub.*
           from
         <foreach open="(" collection="rolesList" item="role" separator=" union all " close=")">
         	select
-        		#{user.id} as party,
+        		#{account.id} as account,
         		#{role.id} as role
         </foreach> sub;
-	</insert>-->
+	</insert>
 </mapper>

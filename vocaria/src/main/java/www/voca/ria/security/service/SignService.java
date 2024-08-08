@@ -36,7 +36,7 @@ public class SignService {
 	/** 로그인 처리 */
 	public SignInResultDto signIn(SignInDTO signInDTO) {
 		LOGGER.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
-		AccountVO user = partyMapper.findById(signInDTO.getLoginId());
+		AccountVO user = partyMapper.getAccountById(signInDTO.getLoginId());
 
 		LOGGER.info("[getSignInResult] 패스워드 비교 수행");
 		//User없는 상황 및 암호 오류 상황을 명확히 구분하여 알려주지 않음. 보안성 강화
