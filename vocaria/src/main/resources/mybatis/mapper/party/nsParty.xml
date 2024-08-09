@@ -101,7 +101,7 @@
 		  left outer join t_party own
 		    on acc.owner = own.id
 		  left outer join rel_account_role allow
-		    on acc.id = allow.role
+		    on acc.id = allow.account
 		  left outer join t_role role
 		    on allow.role = role.id 
 		  left outer join t_party prov
