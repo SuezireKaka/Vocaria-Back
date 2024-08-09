@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,10 +37,9 @@ public class PartyController {
 	*/
 	
 	// /party/speltest
-	@GetMapping("/speltest")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'UT')")
-	public ResponseEntity<String> speltest(@AuthenticationPrincipal AccountVO owner, @PathVariable String memberId,
-			@PathVariable String role) {
+	@GetMapping("/speltest/{groupId}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'UT')")
+	public ResponseEntity<String> speltest(@AuthenticationPrincipal AccountVO owner, @P("groupId") @PathVariable String groupId) {
 		return ResponseEntity.ok("SpEL 성공적");
 	}
 

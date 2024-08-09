@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,16 +23,12 @@ import www.voca.ria.security.model.SignUpResultDto;
 public class SignService {
 	private final Logger LOGGER = LoggerFactory.getLogger(SignService.class);
 
+	@Autowired
 	private PartyMapper partyMapper;
-	public JwtTokenProvider jwtTokenProvider;
-	public PasswordEncoder passwordEncoder;
-
-	public SignService(PartyMapper partyMapper, JwtTokenProvider jwtTokenProvider,
-			PasswordEncoder passwordEncoder) {
-		this.partyMapper = partyMapper;
-		this.jwtTokenProvider = jwtTokenProvider;
-		this.passwordEncoder = passwordEncoder;
-	}
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/** 로그인 처리 */
 	public SignInResultDto signIn(SignInDTO signInDTO) {
@@ -40,7 +37,7 @@ public class SignService {
 
 		LOGGER.info("[getSignInResult] 패스워드 비교 수행");
 		//User없는 상황 및 암호 오류 상황을 명확히 구분하여 알려주지 않음. 보안성 강화
-		if (user == null || !passwordEncoder.matches(signInDTO.getPassWord(), user.getPassword())) {
+		if (user == null || !passwordEncoder.matches(signInDTO.getRawPassword(), user.getPassword())) {
 			throw new BusinessException(ErrorCode.WRONG_PWD);
 		}
 		LOGGER.info("[getSignInResult] 패스워드 일치");
@@ -48,10 +45,10 @@ public class SignService {
 		LOGGER.info("[getSignInResult] SignInResultDto 객체 생성");
 		SignInResultDto signInResultDto = SignInResultDto.builder()
 				.token(jwtTokenProvider.createToken(
-						String.valueOf(user.getId()),
+						user.getId(),
 						user.getAuthorities().stream()
-						.map(GrantedAuthority::getAuthority)
-						.collect(Collectors.toList())))
+							.map(GrantedAuthority::getAuthority)
+							.collect(Collectors.toList())))
 				.roles(user.getAuthorities().stream()
 						.map(GrantedAuthority::getAuthority)
 						.collect(Collectors.toList()))

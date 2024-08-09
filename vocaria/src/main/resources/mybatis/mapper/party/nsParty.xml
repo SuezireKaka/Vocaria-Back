@@ -23,6 +23,8 @@
 	<resultMap id="rmAccountVO" extends="nsEntity.rmTimeEntity"
 		type="www.voca.ria.party.model.AccountVO">
 		<result property="passWord" column="pswd" />
+		<result property="nick" column="nick" />
+		<result property="introduction" column="intro" />
 		<association property="owner" columnPrefix="own_"
 				resultMap="rmPersonVO" />
 		<collection property="roleList" columnPrefix="role_"
@@ -84,8 +86,8 @@
 		   and r.dflt = 1;
 	</select>
 	
-	<!-- 	public AccountVO findById(String id); -->
-	<select id="findById" resultMap="rmAccountVO">
+	<!-- 	AccountVO getAccountById(String id); -->
+	<select id="getAccountById" resultMap="rmAccountVO">
 		select acc.*,
 	        	own.id own_id, own.descrim own_descrim,
 	        	own.name own_name, own.birth own_birth,

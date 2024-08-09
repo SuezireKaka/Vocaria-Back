@@ -40,7 +40,7 @@ public class AccountVO extends TimeEntity implements UserDetails {
 	}
 
 	public String getPassword() {
-		return "";
+		return passWord;
 	}
 
 	public String getUsername() {
