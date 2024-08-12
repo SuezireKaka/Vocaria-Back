@@ -36,6 +36,13 @@ public class PartyController {
 	}
 	*/
 	
+	// /party/tokentest
+	@GetMapping("/tokentest")
+	@PreAuthorize("hasAnyAuthority('0000-manager')")
+	public ResponseEntity<String> tokentest(@AuthenticationPrincipal AccountVO owner) {
+		return ResponseEntity.ok("token 성공적");
+	}
+	
 	// /party/speltest
 	@GetMapping("/speltest/{groupId}")
 	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'UT')")
