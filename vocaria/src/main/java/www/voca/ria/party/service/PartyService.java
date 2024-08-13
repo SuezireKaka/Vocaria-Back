@@ -20,11 +20,16 @@ import www.voca.ria.party.model.role.RoleVO;
 
 @Service
 public class PartyService implements UserDetailsService {
-	@Autowired(required = false)
-	protected PartyMapper partyMapper;
+	@Autowired
+	private PartyMapper partyMapper;
 
-	@Autowired(required = false)
+	@Autowired
 	private PasswordEncoder pswdEnc;
+	
+	@Override
+	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+		return partyMapper.getAccountById(id);
+	}
 	
 	public RoleVO getRoleByProviderAndName(String providerId, String name) {
 		return partyMapper.getRoleByProviderAndName(providerId, name);
@@ -63,11 +68,6 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.createPerson(person)
 			& partyMapper.createAccount(account)
 			& partyMapper.grantRolesToUser(account, defaultRoleList);
-	}
-
-	@Override
-	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-		return partyMapper.getAccountById(id);
 	}
 
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.voca.ria.attend.mapper.AttendMapper">
+	
+	<!-- public int attendAll(String userId);  -->
+	<insert id="attendAll">
+		insert into t_attend(account, groupid)
+		select distinct #{userId} account, role.provider groupid
+		  from t_account acc
+		  left outer join rel_account_role rel
+		    on acc.id = rel.account
+		  left outer join t_role role
+		    on rel.role = role.id
+		 where acc.id = #{userId}
+			on duplicate key update groupid = role.provider
+	</insert>
+</mapper>
