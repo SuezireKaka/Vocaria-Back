@@ -6,7 +6,7 @@
 <mapper namespace="www.voca.ria.vocabulary.mapper.VocaMapper">
 	<resultMap id="rmWordVO" type="www.voca.ria.vocabulary.model.WordVO">
 		<result property="name" column="name" />
-		<result property="parsed" column="parsed" />
+		<result property="meaning" column="meaning" />
 	</resultMap>
 	
 	
@@ -18,8 +18,9 @@
 		 limit ${choiceNum};
 	</select>
 	
-	<!-- public int buildSecretQuestion(); -->
-	<insert id="buildSecretQuestion">
-		
+	<!-- public String setupTodayWords(@Param("student") AccountVO student,
+			@Param("choiseNum") int choiseNum); -->
+	<insert id="setupTodayWords">
+		call DAILY_VOCALIST(#{student.id}, ${choiseNum}); 
 	</insert>
 </mapper>

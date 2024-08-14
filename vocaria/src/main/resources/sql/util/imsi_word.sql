@@ -1,0 +1,1 @@
+create table imsi_word(word varchar(255));

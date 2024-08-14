@@ -8,6 +8,9 @@ import lombok.Getter;
 
 @Getter
 public class QuestionDTO {
+	public static final int CHOISE_NUM = 4;
+	public static final int QUESTION_NUM_PER_EXAM = 3;
+	
 	private String question;
 	private List<String> choiseList;
 	

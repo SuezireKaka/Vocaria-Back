@@ -19,6 +19,7 @@ import www.voca.ria.security.config.JwtTokenProvider;
 import www.voca.ria.security.model.SignInDTO;
 import www.voca.ria.security.model.SignInResultDto;
 import www.voca.ria.security.model.SignUpResultDto;
+import www.voca.ria.vocabulary.service.VocaService;
 
 @Service
 public class SignService {
@@ -28,6 +29,8 @@ public class SignService {
 	private PartyService partyService;
 	@Autowired
 	private AttendService attendService;
+	@Autowired
+	private VocaService vocaService;
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	@Autowired
@@ -62,7 +65,10 @@ public class SignService {
 		LOGGER.info("[getSignInResult] SignInResultDto 객체에 값 주입");
 		setSuccessResult(signInResultDto);
 		
-		attendService.attendAll(signInResultDto.getUserId());
+		// 오늘 처음 출석이라서 출석 테이블에 데이터가 들어가면 문제 만들기
+		if (attendService.attendAll(signInResultDto.getUserId()) > 0) {
+			vocaService.setupTodayMission(user);
+		}
 
 		return signInResultDto;
 	}
