@@ -39,14 +39,17 @@ public class PartyController {
 	// /party/tokentest
 	@GetMapping("/tokentest")
 	@PreAuthorize("hasAnyAuthority('0000-manager')")
-	public ResponseEntity<String> tokentest(@AuthenticationPrincipal AccountVO owner) {
+	public ResponseEntity<String> tokentest(
+			@AuthenticationPrincipal AccountVO tester) {
 		return ResponseEntity.ok("token 성공적");
 	}
 	
 	// /party/speltest
 	@GetMapping("/speltest/{groupId}")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'UT')")
-	public ResponseEntity<String> speltest(@AuthenticationPrincipal AccountVO owner, @P("groupId") @PathVariable String groupId) {
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'ST')")
+	public ResponseEntity<String> speltest(
+			@AuthenticationPrincipal AccountVO tester,
+			@PathVariable String groupId) {
 		return ResponseEntity.ok("SpEL 성공적");
 	}
 

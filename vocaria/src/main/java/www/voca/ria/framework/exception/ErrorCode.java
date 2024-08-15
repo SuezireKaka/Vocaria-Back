@@ -23,8 +23,8 @@ public enum ErrorCode {
 
 	// Transaction Delete Error
 	DELETE_ERROR(200, "9999", "Delete Transaction Error Exception"),
-
-	INVAID_UPDATE(200, "9998", "작성자와 수정하고자 하는 사람이 다릅니다"),
+	
+	STRANGE_DATE(200, "9998", "Strange Date-Format Exception"),
 
 	; // End
 

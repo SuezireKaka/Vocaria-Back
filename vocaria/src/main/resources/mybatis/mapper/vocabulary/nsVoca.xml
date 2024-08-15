@@ -4,18 +4,25 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="www.voca.ria.vocabulary.mapper.VocaMapper">
+	<resultMap id="rmMissionVO" type="www.voca.ria.vocabulary.model.MissionVO">
+		<result property="word" column="word" />
+		<result property="isRead" column="hasread" />
+		<result property="isComplete" column="complete" />
+	</resultMap>
+	
 	<resultMap id="rmWordVO" type="www.voca.ria.vocabulary.model.WordVO">
 		<result property="name" column="name" />
 		<result property="meaning" column="meaning" />
 	</resultMap>
 	
 	
-	<!-- public List<WordVO> listRandomWordsOfNumber(int choiceNum); -->
-	<select id="listRandomWordsOfNumber" resultMap="rmWordVO">
-		select wd.*
-		  from t_word wd
-		 order by rand()
-		 limit ${choiceNum};
+	<!-- public List<MissionVO> listAllMission(@Param("student") AccountVO student,
+			@Param("dateString") String dateString); -->
+	<select id="listAllMission" resultMap="rmMissionVO">
+		select word, hasread, complete
+		  from t_daily_mission
+		 where account = #{student.id}
+		   and time = #{dateString}
 	</select>
 	
 	<!-- public String setupTodayWords(@Param("student") AccountVO student,

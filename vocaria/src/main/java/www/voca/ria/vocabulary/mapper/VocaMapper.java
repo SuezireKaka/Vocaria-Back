@@ -6,11 +6,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.vocabulary.model.WordVO;
+import www.voca.ria.vocabulary.model.MissionVO;
 
 @Mapper
 public interface VocaMapper {
-	public List<WordVO> listRandomWordsOfNumber(int choiceNum);
+	public List<MissionVO> listAllMission(@Param("student") AccountVO student,
+			@Param("dateString") String dateString);
 	
 	public int setupTodayWords(@Param("student") AccountVO student,
 			@Param("choiseNum") int choiseNum);

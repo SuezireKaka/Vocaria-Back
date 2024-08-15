@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class QuestionDTO {
 	public static final int CHOISE_NUM = 4;
 	public static final int QUESTION_NUM_PER_EXAM = 3;
