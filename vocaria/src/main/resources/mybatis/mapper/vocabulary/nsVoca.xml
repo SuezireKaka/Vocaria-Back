@@ -16,12 +16,12 @@
 	</resultMap>
 	
 	
-	<!-- public List<MissionVO> listAllMission(@Param("student") AccountVO student,
+	<!-- public List<MissionVO> listAllMission(@Param("studentId") String accountId,
 			@Param("dateString") String dateString); -->
 	<select id="listAllMission" resultMap="rmMissionVO">
 		select word, hasread, complete
 		  from t_daily_mission
-		 where account = #{student.id}
+		 where account = #{studentId}
 		   and time = #{dateString}
 	</select>
 	

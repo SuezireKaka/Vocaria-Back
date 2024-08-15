@@ -31,7 +31,7 @@ public class VocaController {
 			@AuthenticationPrincipal AccountVO student,
 			@PathVariable String accountId,
 			@PathVariable String dateString) {
-		MissionDTO result = vocaService.getMission(student, dateString);
+		MissionDTO result = vocaService.getMission(accountId, dateString);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

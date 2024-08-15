@@ -19,10 +19,10 @@ public class VocaService {
 	@Autowired
 	private VocaMapper vocaMapper;
 	
-	public MissionDTO getMission(AccountVO student, String dateString) {
+	public MissionDTO getMission(String accountId, String dateString) {
 		
 		List<MissionVO> missionList =
-				vocaMapper.listAllMission(student, dateString);
+				vocaMapper.listAllMission(accountId, dateString);
 		
 		try {
 			return new MissionDTO(missionList, dateString);

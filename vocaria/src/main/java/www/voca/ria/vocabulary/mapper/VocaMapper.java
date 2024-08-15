@@ -10,7 +10,7 @@ import www.voca.ria.vocabulary.model.MissionVO;
 
 @Mapper
 public interface VocaMapper {
-	public List<MissionVO> listAllMission(@Param("student") AccountVO student,
+	public List<MissionVO> listAllMission(@Param("studentId") String accountId,
 			@Param("dateString") String dateString);
 	
 	public int setupTodayWords(@Param("student") AccountVO student,
