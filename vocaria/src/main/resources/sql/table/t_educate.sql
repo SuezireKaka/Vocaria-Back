@@ -1,6 +1,6 @@
 create table t_educate(
 	account			varchar(30),
-	word			varchar(255),
+	chapter			char(4),
 	viewcnt			int,
-	primary key (account, word)
+	primary key (account, chapter)
 );

@@ -1,8 +1,6 @@
 create table t_question(
 	id				char(4) primary key,
-	account			varchar(30),
-	time			date default curdate(),
-	choise_num		int,
-	answer			int
+	subject			char(4),
+	question		varchar(10000)
 );
-create index idx_account_time on t_question(account, time);
+create index idx_subject on t_question(subject);
