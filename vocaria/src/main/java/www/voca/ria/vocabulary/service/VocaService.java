@@ -1,42 +1,44 @@
 package www.voca.ria.vocabulary.service;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import www.voca.ria.framework.exception.BusinessException;
-import www.voca.ria.framework.exception.ErrorCode;
+import www.voca.ria.framework.model.structure.PageDTO;
+import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.vocabulary.mapper.VocaMapper;
-import www.voca.ria.vocabulary.model.MissionDTO;
-import www.voca.ria.vocabulary.model.MissionVO;
-import www.voca.ria.vocabulary.model.QuestionDTO;
+import www.voca.ria.vocabulary.model.ChapterVO;
+import www.voca.ria.vocabulary.model.VocaVO;
 
 @Service
 public class VocaService {
 	@Autowired
 	private VocaMapper vocaMapper;
 	
-	public MissionDTO getMission(String accountId, String dateString) {
+	public Pair<List<VocaVO>, PageDTO> listAllVoca(int pageNum) {
+		PageDTO page = new PageDTO(pageNum);
 		
-		List<MissionVO> missionList =
-				vocaMapper.listAllMission(accountId, dateString);
+		List<VocaVO> vocaList = vocaMapper.listAllVoca(page);
 		
-		try {
-			return new MissionDTO(missionList, dateString);
-		}
-		catch (ParseException e) {
-			throw new BusinessException("날짜 형식을 다시 확인해주세요", ErrorCode.STRANGE_DATE);
-		}
+		page.buildPagination(vocaMapper.getFoundRows());
+		
+		return new Pair<>(vocaList, page);
+	}
+	
+	public VocaVO getVocaById(String id) {
+		return vocaMapper.getVocaById(id);
+	}
+	
+	public ChapterVO getMission(String accountId, String dateString) {
+		
+		return null;
 	}
 	
 	public int setupTodayMission(AccountVO student) {
-		
-		int todayMissionNum = QuestionDTO.QUESTION_NUM_PER_EXAM
-				* QuestionDTO.CHOISE_NUM;
-		
-		return vocaMapper.setupTodayWords(student, todayMissionNum);
+		return vocaMapper.setupTodayMission(student);
 	}
+
+	
 }

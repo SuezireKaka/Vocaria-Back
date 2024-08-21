@@ -5,11 +5,9 @@ import lombok.Getter;
 
 @Data
 @Getter
-public class PagingDTO {
-	private static final int POST_LIMIT = 10;
-	private static final int PARTY_LIMIT = 10;
-	private static final int SERIES_LIMIT = 10;
-	private static final int BTN_CNT = 10;
+public class PageDTO {
+	public static final int ONE_PAGE_NUM = 10;
+	public static final int BTN_CNT = 10;
 	private int page;
 	private long offset;
 
@@ -18,25 +16,13 @@ public class PagingDTO {
 	private boolean prev;
 	private boolean next;
 	
-	public PagingDTO(int page) {
+	public PageDTO(int page) {
 		this.page = page;
-		offset = (this.page - 1) *  POST_LIMIT;
+		offset = (this.page - 1) * ONE_PAGE_NUM;
 	}
 
 	public long getOffset() {
 		return offset;
-	}
-
-	public static int getSeriesLimit() {
-		return SERIES_LIMIT;
-	}
-	
-	public static int getPostLimit() {
-		return POST_LIMIT;
-	}
-	
-	public static int getPartyLimit() {
-		return PARTY_LIMIT;
 	}
 	
 	public int getLastPage() {
@@ -45,6 +31,10 @@ public class PagingDTO {
 
 	public int getStartPage() {
 		return startPage;
+	}
+	
+	public int getOnePageNum() {
+		return ONE_PAGE_NUM;
 	}
 
 	public boolean isPrev() {
@@ -69,7 +59,7 @@ public class PagingDTO {
 	 */
 	public void buildPagination(long dataCount) {
 		//전체 쪽 수 
-		int totPageCount = (int) Math.ceil((float) dataCount / POST_LIMIT);
+		int totPageCount = (int) Math.ceil((float) dataCount / ONE_PAGE_NUM);
 		//전체 쪽 수의 최소값 
 		totPageCount = totPageCount < 1 ? 1 : totPageCount;
 		//마지막 쪽 번호의 기본값 산출

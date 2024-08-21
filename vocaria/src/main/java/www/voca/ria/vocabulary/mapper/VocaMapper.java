@@ -5,18 +5,19 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import www.voca.ria.framework.mapper.GeneralMapper;
+import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.vocabulary.model.MissionVO;
+import www.voca.ria.vocabulary.model.VocaVO;
 
 @Mapper
-public interface VocaMapper {
-	public List<MissionVO> listAllMission(@Param("studentId") String accountId,
-			@Param("dateString") String dateString);
+public interface VocaMapper extends GeneralMapper {
+	public List<VocaVO> listAllVoca(@Param("page") PageDTO page);
 	
-	public int setupTodayWords(@Param("student") AccountVO student,
-			@Param("choiseNum") int choiseNum);
+	public VocaVO getVocaById(@Param("id") String id);
+	
+	public int setupTodayMission(@Param("student") AccountVO student);
 
-	public int buildSecretQuestion(@Param("student") AccountVO student,
-			@Param("choiseNum") int choiseNum);
+	
 
 }
