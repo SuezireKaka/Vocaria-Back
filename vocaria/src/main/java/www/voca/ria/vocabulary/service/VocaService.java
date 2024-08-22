@@ -30,15 +30,4 @@ public class VocaService {
 	public VocaVO getVocaById(String id) {
 		return vocaMapper.getVocaById(id);
 	}
-	
-	public ChapterVO getMission(String accountId, String dateString) {
-		
-		return null;
-	}
-	
-	public int setupTodayMission(AccountVO student) {
-		return vocaMapper.setupTodayMission(student);
-	}
-
-	
 }

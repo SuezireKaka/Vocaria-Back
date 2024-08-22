@@ -1,4 +1,4 @@
-package www.voca.ria.vocabulary.strategy;
+package www.voca.ria.mission.strategy;
 
 import java.util.List;
 import java.util.stream.Collectors;

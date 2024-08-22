@@ -1,4 +1,4 @@
-package www.voca.ria.vocabulary.strategy;
+package www.voca.ria.mission.strategy;
 
 import java.util.List;
 
@@ -22,6 +22,6 @@ public interface QuestionBuildStrategy {
 	public List<String> getParsedData();
 
 	public static enum StrategyType {
-		DIRECT, AUTO
+		AUTO, DIRECT
 	}
 }

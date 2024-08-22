@@ -40,9 +40,19 @@
 		offset ${page.offset}
 	</select>
 	
-	<!-- public String setupTodayWords(@Param("student") AccountVO student,
-			@Param("choiseNum") int choiseNum); -->
-	<insert id="setupTodayWords">
-		call DAILY_VOCALIST(#{student.id}, ${choiseNum}); 
-	</insert>
+	<!-- public VocaVO getVocaById(@Param("id") String id); -->
+	<select id="getVocaById" resultMap="rmVocaVO">
+		select voca.*,
+		    maker.id mkr_id, maker.nick mkr_nick,
+		    chapter.id chpt_id, chapter.name chpt_name, count(rel.pos) chpt_qnum
+		  from t_voca voca
+		  left outer join t_account maker
+		    on maker.id = voca.maker
+		  left outer join t_chapter chapter
+		    on chapter.voca = voca.id
+		  left outer join rel_chapter_question rel
+		    on rel.chapter = chapter.id
+		 where voca.id = #{id}
+		 group by rel.chapter
+	</select>
 </mapper>
