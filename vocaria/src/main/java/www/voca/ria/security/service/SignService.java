@@ -30,8 +30,6 @@ public class SignService {
 	@Autowired
 	private AttendService attendService;
 	@Autowired
-	private VocaService vocaService;
-	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -65,10 +63,7 @@ public class SignService {
 		LOGGER.info("[getSignInResult] SignInResultDto 객체에 값 주입");
 		setSuccessResult(signInResultDto);
 		
-		// 오늘 처음 출석이라서 출석 테이블에 데이터가 들어가면 문제 만들기
-		if (attendService.attendAll(signInResultDto.getUserId()) > 0) {
-			vocaService.setupTodayMission(user);
-		}
+		attendService.attendAll(signInResultDto.getUserId());
 
 		return signInResultDto;
 	}

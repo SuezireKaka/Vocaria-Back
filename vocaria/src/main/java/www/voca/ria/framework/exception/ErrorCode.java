@@ -25,6 +25,8 @@ public enum ErrorCode {
 	DELETE_ERROR(200, "9999", "Delete Transaction Error Exception"),
 	
 	STRANGE_DATE(200, "9998", "Strange Date-Format Exception"),
+	
+	INVALID_STRATEGY(200, "9998", "Invalid Strategy Exception"),
 
 	; // End
 
