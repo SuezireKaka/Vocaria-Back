@@ -6,15 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import www.voca.ria.mission.mapper.MissionMapper;
+import www.voca.ria.mission.model.MissionDTO;
+import www.voca.ria.mission.strategy.QuestionBuildStrategy;
+import www.voca.ria.mission.strategy.QuestionBuildStrategy.StrategyType;
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.vocabulary.model.ChapterVO;
 
 @Service
 public class MissionService {
 	@Autowired
 	private MissionMapper missionMapper;
 	
-	public ChapterVO getMission(String accountId, String dateString) {
+	public MissionDTO getMission(String accountId, String dateString) {
 		
 		return null;
 	}
@@ -22,13 +24,19 @@ public class MissionService {
 	public int setupTodayMission(AccountVO student) {
 		return missionMapper.setupTodayMission(student);
 	}
+	
+	public boolean buildMission(QuestionBuildStrategy strategy, List<String> parsedData) {
+		return strategy.getType() == StrategyType.AUTO
+				? buildMissionAutomatically(parsedData)
+				: buildMissionDirectly(parsedData);
+	}
 
-	public boolean buildMissionAutomatically(List<String> parsedData) {
+	private boolean buildMissionAutomatically(List<String> parsedData) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean buildMissionDirectly(List<String> parsedData) {
+	private boolean buildMissionDirectly(List<String> parsedData) {
 		// TODO Auto-generated method stub
 		return false;
 	}

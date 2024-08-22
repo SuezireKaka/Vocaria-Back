@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
-import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.vocabulary.mapper.VocaMapper;
-import www.voca.ria.vocabulary.model.ChapterVO;
 import www.voca.ria.vocabulary.model.VocaVO;
 
 @Service

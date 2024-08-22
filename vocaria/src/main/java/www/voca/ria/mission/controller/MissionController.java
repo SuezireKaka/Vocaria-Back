@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import www.voca.ria.framework.exception.BusinessException;
 import www.voca.ria.framework.exception.ErrorCode;
+import www.voca.ria.mission.model.MissionDTO;
 import www.voca.ria.mission.service.MissionService;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy.StrategyType;
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.vocabulary.model.ChapterVO;
 
 @RestController
 @RequestMapping("/mission")
@@ -43,15 +43,15 @@ public class MissionController {
 			+ "principal.getId() == #accountId"
 			+ ") or "
 			+ "@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
-	public ResponseEntity<ChapterVO> getMission(@AuthenticationPrincipal AccountVO student,
+	public ResponseEntity<MissionDTO> getMission(@AuthenticationPrincipal AccountVO student,
 			@PathVariable String accountId, @PathVariable String dateString) {
-		ChapterVO result = missionService.getMission(accountId, dateString);
+		MissionDTO result = missionService.getMission(accountId, dateString);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	// /mission/anonymous/buildMission/account1-account2-account3
 	@PostMapping("/anonymous/buildMission/{accountIdChain}")
-	//@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
+	// @PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
 	public ResponseEntity<Boolean> buildMission(@AuthenticationPrincipal AccountVO student,
 			@PathVariable String accountIdChain,
 			@RequestBody QuestionBuildStrategy strategy) throws BusinessException {
@@ -64,9 +64,7 @@ public class MissionController {
 			throw new BusinessException("Invalid strategy found", ErrorCode.INVALID_STRATEGY);
 		}
 		
-		boolean result = strategy.getType() == StrategyType.AUTO
-				? missionService.buildMissionAutomatically(parsedData)
-				: missionService.buildMissionDirectly(parsedData);
+		boolean result = missionService.buildMission(strategy, parsedData);
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
