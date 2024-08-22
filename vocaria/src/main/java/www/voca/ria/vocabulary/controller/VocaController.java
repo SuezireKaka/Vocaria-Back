@@ -51,7 +51,7 @@ public class VocaController {
 			+ " and "
 			+ "principal.getId() == #accountId"
 			+ ") or "
-			+ "@actScopeSpel.isAbleToRunAny(authentication, '0000', 'SM')")
+			+ "@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
 	public ResponseEntity<ChapterVO> getMission(@AuthenticationPrincipal AccountVO student,
 			@PathVariable String accountId, @PathVariable String dateString) {
 		ChapterVO result = vocaService.getMission(accountId, dateString);
@@ -60,7 +60,7 @@ public class VocaController {
 
 	// /voca/buildMission/account1-account2-account3
 	@PostMapping("/buildMission/{accountIdChain}")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'SM')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
 	public ResponseEntity<Boolean> buildMission(@AuthenticationPrincipal AccountVO student,
 			@PathVariable String accountIdChain,
 			@RequestBody QuestionBuildStrategy strategy) throws BusinessException {
