@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
+import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.vocabulary.mapper.VocaMapper;
 import www.voca.ria.vocabulary.model.VocaVO;
 
@@ -25,7 +26,28 @@ public class VocaService {
 		return new Pair<>(vocaList, page);
 	}
 	
+	public Pair<List<VocaVO>, PageDTO> listAllSubscribes(AccountVO student, int pageNum) {
+		PageDTO page = new PageDTO(pageNum);
+		
+		List<VocaVO> vocaList = vocaMapper.listAllSubscribes(student, page);
+		
+		page.buildPagination(vocaMapper.getFoundRows());
+		
+		return new Pair<>(vocaList, page);
+	}
+	
 	public VocaVO getVocaById(String id) {
 		return vocaMapper.getVocaById(id);
+	}
+	
+	public boolean isSubscribing(AccountVO student, String vocaId) {
+		return vocaMapper.isSubscribing(student, vocaId);
+	}
+
+	public int toggleSubscribe(AccountVO student, String vocaId) {
+		if (vocaMapper.isFirstSubscribe(student, vocaId)) {
+			return vocaMapper.firstSubscribe(student, vocaId);
+		}
+		return vocaMapper.toggleSubscribe(student, vocaId);
 	}
 }

@@ -40,6 +40,23 @@
 		offset ${page.offset}
 	</select>
 	
+	<!-- public List<VocaVO> listAllSubscribes(@Param("student") AccountVO student,
+			@Param("page") PageDTO page); -->
+	<select id="listAllSubscribes" resultMap="rmVocaVO">
+		select voca.id, voca.name, voca.reg_dt, voca.upt_dt,
+		        maker.id mkr_id, maker.nick mkr_nick
+		  from t_voca voca
+		  left outer join t_account maker
+		    on maker.id = voca.maker
+		  left outer join t_subscribe subs
+		    on subs.voca = voca.id
+		 where subs.account = #{student.id}
+		   and subs.alive = 1
+		 order by id desc
+		 limit ${page.onePageNum}
+		offset ${page.offset}
+	</select>
+	
 	<!-- public VocaVO getVocaById(@Param("id") String id); -->
 	<select id="getVocaById" resultMap="rmVocaVO">
 		select voca.*,
@@ -55,4 +72,39 @@
 		 where voca.id = #{id}
 		 group by rel.chapter
 	</select>
+	
+	<!-- public boolean isSubscribing(@Param("student") AccountVO student,
+			@Param("vocaId") String vocaId); -->
+	<select id="isSubscribing" resultType="boolean">
+		select count(*) > 0
+		  from t_subscribe
+		 where account = #{student.id}
+		   and voca = #{vocaId}
+		   and alive = 1
+	</select>
+	
+	<!-- public boolean isFirstSubscribe(@Param("student") AccountVO student,
+			@Param("vocaId") String vocaId); -->
+	<select id="isFirstSubscribe" resultType="boolean">
+		select count(*) = 0
+		  from t_subscribe
+		 where account = #{student.id}
+		   and voca = #{vocaId}
+	</select>
+	
+	<!-- public int firstSubscribe(@Param("student") AccountVO student,
+			@Param("vocaId") String vocaId); -->
+	<insert id="firstSubscribe">
+		insert into t_subscribe(account, voca)
+		values (#{student.id}, #{vocaId})
+	</insert>
+	
+	<!-- public int toggleSubscribe(@Param("student") AccountVO student,
+			@Param("vocaId") String vocaId); -->
+	<update id="toggleSubscribe">
+		update t_subscribe
+		   set alive = 1 - alive
+		 where account = #{student.id}
+		   and voca = #{vocaId}
+	</update>
 </mapper>
