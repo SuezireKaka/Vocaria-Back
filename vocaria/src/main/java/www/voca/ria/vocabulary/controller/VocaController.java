@@ -53,7 +53,7 @@ public class VocaController {
 	
 	// /voca/isSubscribing/0000
 	@GetMapping("/isSubscribing/{vocaId}")
-	@PreAuthorize("(@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
 	public ResponseEntity<Boolean> isSubscribing(@PathVariable String vocaId,
 			@AuthenticationPrincipal AccountVO student) {
 		boolean result = vocaService.isSubscribing(student, vocaId);
@@ -62,7 +62,7 @@ public class VocaController {
 	
 	// /voca/toggleSubscribe/0000
 	@PostMapping("/toggleSubscribe/{vocaId}")
-	@PreAuthorize("(@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
 	public ResponseEntity<Integer> toggleSubscribe(@PathVariable String vocaId,
 			@AuthenticationPrincipal AccountVO student) {
 		int result = vocaService.toggleSubscribe(student, vocaId);
