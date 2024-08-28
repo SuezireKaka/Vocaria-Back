@@ -1,10 +1,12 @@
 package www.voca.ria.party.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import www.voca.ria.framework.model.structure.PageDTO;
+import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
+import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.service.PartyService;
 
@@ -24,17 +29,16 @@ public class PartyController {
 	@Autowired
 	private PartyService partyService;
 
-	/*
 	// /party/listAllAccount/0000/1
-	@GetMapping("/listAllAccount/{ownerId}/{page}/{orderColumn}")
-	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
-	public ResponseEntity<Pair<List<AccountVO>, PagingDTO>> listAllAccount(
-			@AuthenticationPrincipal AccountVO manager, @PathVariable String ownerId, @PathVariable int page,
-			@PathVariable String orderColumn) {
-		Pair<List<AccountVO>, PagingDTO> result = partyService.listAllAccount(ownerId, page);
+	@GetMapping("/listAllAccount/{groupId}/{pageNum}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'SM')")
+	public ResponseEntity<Pair<List<AccountVO>, PageDTO>> listAllAccount(
+			@AuthenticationPrincipal AccountVO manager,
+			@PathVariable String groupId, @PathVariable int pageNum) {
+		Pair<List<AccountVO>, PageDTO> result =
+				partyService.listAllAccount(groupId, pageNum);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	*/
 	
 	// /party/tokentest
 	@GetMapping("/tokentest")
@@ -51,6 +55,15 @@ public class PartyController {
 			@AuthenticationPrincipal AccountVO tester,
 			@PathVariable String groupId) {
 		return ResponseEntity.ok("SpEL 성공적");
+	}
+	
+	// /party/getGroupById/0000
+	@GetMapping("/getGroupById/{groupId}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'ST')")
+	public ResponseEntity<GroupVO> getGroupById(
+			@PathVariable String groupId) {
+		GroupVO result = partyService.getGroupById(groupId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	// /party/anonymous/check/loginId/addr

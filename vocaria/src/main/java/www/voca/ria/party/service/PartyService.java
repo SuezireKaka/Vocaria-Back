@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import www.voca.ria.framework.model.structure.PageDTO;
+import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.mapper.PartyMapper;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.party.model.GroupVO;
@@ -25,6 +27,20 @@ public class PartyService implements UserDetailsService {
 
 	@Autowired
 	private PasswordEncoder pswdEnc;
+	
+	public Pair<List<AccountVO>, PageDTO> listAllAccount(String groupId, int pageNum) {
+		PageDTO page = new PageDTO(pageNum);
+		
+		List<AccountVO> accountList = partyMapper.listAllAccount(groupId, page);
+		
+		page.buildPagination(partyMapper.getFoundRows());
+		
+		return new Pair<>(accountList, page);
+	}
+	
+	public GroupVO getGroupById(String groupId) {
+		return partyMapper.getGroupById(groupId);
+	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
