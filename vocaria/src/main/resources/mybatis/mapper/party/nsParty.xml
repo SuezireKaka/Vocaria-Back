@@ -226,4 +226,15 @@
         		#{role.id} as role
         </foreach> sub;
 	</insert>
+	
+	<!-- public int depriveRolesFromUser(@Param("account") AccountVO account,
+			@Param("groupId") String groupId);-->
+	<delete id="depriveRolesFromUser">
+		delete rel.*
+		  from rel_account_role rel
+		  left outer join t_role role
+		    on role.id = rel.role
+		 where rel.account = #{account.id}
+		   and role.provider = #{groupId}
+	</delete>
 </mapper>

@@ -44,4 +44,7 @@ public interface PartyMapper extends GeneralMapper {
 	
 	public int grantRolesToUser(@Param("account") AccountVO account,
 			@Param("rolesList") List<RoleVO> rolesList);
+	
+	public int depriveRolesFromUser(@Param("account") AccountVO account,
+			@Param("groupId") String groupId);
 }

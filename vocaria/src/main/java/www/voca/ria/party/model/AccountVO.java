@@ -18,7 +18,7 @@ import www.voca.ria.party.model.role.RoleVO;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
-@JsonIgnoreProperties({"id", "passWord"})
+@JsonIgnoreProperties({"passWord"})
 public class AccountVO extends TimeEntity implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	

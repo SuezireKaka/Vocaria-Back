@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import www.voca.ria.framework.exception.BusinessException;
+import www.voca.ria.framework.exception.ErrorCode;
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.SignUpDto;
+import www.voca.ria.party.model.role.GrantDTO;
 import www.voca.ria.party.service.PartyService;
 
 @RestController
@@ -59,7 +62,7 @@ public class PartyController {
 	
 	// /party/getGroupById/0000
 	@GetMapping("/getGroupById/{groupId}")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'ST')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'SM')")
 	public ResponseEntity<GroupVO> getGroupById(
 			@PathVariable String groupId) {
 		GroupVO result = partyService.getGroupById(groupId);
@@ -94,23 +97,22 @@ public class PartyController {
 		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
 	}
 	
-
-	// /party/reRole
-	@GetMapping("/reRole/{memberId}/{role}")
-	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
-	public ResponseEntity<Integer> reRole(@AuthenticationPrincipal AccountVO owner, @PathVariable String memberId,
-			@PathVariable String role) {
-		return ResponseEntity.ok(partyService.reRole(memberId, role));
+	*/
+	
+	// /party/syncRole/0000
+	@PostMapping("/syncRole/{groupId}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'SM')")
+	public ResponseEntity<Integer> syncRole(@PathVariable String groupId,
+			@RequestBody List<GrantDTO> grantList) throws BusinessException {
+		
+		if (! grantList.stream().allMatch(grant -> grant.isSecureGrant(groupId))) {
+			throw new BusinessException("뭔가 이상한 요청입니다", ErrorCode.NOT_CONCERNED);
+		}
+		
+		return ResponseEntity.ok(partyService.syncRole(groupId, grantList));
 	}
-
-	// /party/reRole
-	@GetMapping("/updateStatus/{memberId}/{loginResultCode}")
-	@PreAuthorize("hasAnyAuthority('manager', 'admin')")
-	public ResponseEntity<Integer> updateStatus(@AuthenticationPrincipal AccountVO owner, @PathVariable String memberId,
-			@PathVariable String loginResultCode) {
-		return ResponseEntity.ok(partyService.updateStatus(memberId, loginResultCode));
-	}
-
+	
+	/*
 	// /party/deleteMember/닉
 	@GetMapping("/deleteMember/{id}")
 	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")

@@ -1,6 +1,7 @@
 package www.voca.ria.party.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.PersonVO;
 import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.model.role.ActVO;
+import www.voca.ria.party.model.role.GrantDTO;
 import www.voca.ria.party.model.role.RoleVO;
 
 
@@ -86,4 +88,30 @@ public class PartyService implements UserDetailsService {
 			& partyMapper.grantRolesToUser(account, defaultRoleList);
 	}
 
+	public int syncRole(String groupId, List<GrantDTO> grantList) {
+		if (grantList.size() == 0) {
+			return 0;
+		}
+		
+		int result = 1;
+		
+		// 전부 초기화하고 넣는 게 더 나은 듯;
+		for (GrantDTO grant : grantList) {
+			AccountVO dummy = AccountVO.builder()
+					.id(grant.getAccountId())
+					.build();
+			
+			List<RoleVO> rolesList = grant.getRoleList();
+			
+			result += partyMapper.depriveRolesFromUser(dummy, groupId)
+					+ partyMapper.grantRolesToUser(dummy, rolesList);
+		}
+		
+		return result;
+	}
+
 }
+
+
+
+
