@@ -22,6 +22,7 @@ import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.SignUpDto;
+import www.voca.ria.party.model.role.ActVO;
 import www.voca.ria.party.model.role.GrantDTO;
 import www.voca.ria.party.service.PartyService;
 
@@ -40,6 +41,13 @@ public class PartyController {
 			@PathVariable String groupId, @PathVariable int pageNum) {
 		Pair<List<AccountVO>, PageDTO> result =
 				partyService.listAllAccount(groupId, pageNum);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// /party/anonymous/listAllAct
+	@GetMapping("/anonymous/listAllAct")
+	public ResponseEntity<List<ActVO>> listAllAct() {
+		List<ActVO> result = partyService.listAllAct();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
@@ -69,16 +77,23 @@ public class PartyController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	// /party/anonymous/check/loginId/addr
-	@GetMapping("/anonymous/check/loginId/{loginId}")
-	public ResponseEntity<Boolean> checkLoginId(@PathVariable String loginId) {
-		return ResponseEntity.ok(partyService.checkLoginId(loginId));
+	// /party/check/groupName/addr
+	@GetMapping("/check/groupName/{groupName}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
+	public ResponseEntity<Boolean> checkGroupName(@PathVariable String groupName) {
+		return ResponseEntity.ok(partyService.checkGroupName(groupName));
 	}
 
 	// /party/anonymous/check/nick/adfes
 	@GetMapping("/anonymous/check/nick/{nick}")
 	public ResponseEntity<Boolean> checkNick(@PathVariable String nick) {
 		return ResponseEntity.ok(partyService.checkNick(nick));
+	}
+	
+	// /party/anonymous/check/loginId/addr
+	@GetMapping("/anonymous/check/loginId/{loginId}")
+	public ResponseEntity<Boolean> checkLoginId(@PathVariable String loginId) {
+		return ResponseEntity.ok(partyService.checkLoginId(loginId));
 	}
 
 	

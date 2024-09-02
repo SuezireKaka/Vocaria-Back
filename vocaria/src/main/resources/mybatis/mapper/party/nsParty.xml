@@ -112,6 +112,12 @@
 		   and r.dflt = 1;
 	</select>
 	
+	<!-- 	public List<ActVO> listAllAct(); -->
+	<select id="listAllAct" resultMap="rmActVO">
+		select *
+		  from sys_act
+	</select>
+	
 	<!-- 	public GroupVO getGroupById(String groupId); -->
 	<select id="getGroupById" resultMap="rmGroupVO">
 		select g.*,
@@ -196,6 +202,14 @@
 		select count(*) = 0
 		  from t_account
 		 where nick = binary(#{nick})
+	</select>
+	
+	<!-- 	public boolean isValidGroupName(String groupName); -->
+	<select id="isValidGroupName" resultType="boolean">
+		select count(*) = 0
+		  from t_party
+		 where name = binary(#{boolean})
+		   and descrim = 'G'
 	</select>
 
 	<!-- public int createPerson(@Param("person") PersonVO person); -->

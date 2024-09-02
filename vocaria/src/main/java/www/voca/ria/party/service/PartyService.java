@@ -1,7 +1,6 @@
 package www.voca.ria.party.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +39,10 @@ public class PartyService implements UserDetailsService {
 		return new Pair<>(accountList, page);
 	}
 	
+	public List<ActVO> listAllAct() {
+		return partyMapper.listAllAct();
+	}
+	
 	public GroupVO getGroupById(String groupId) {
 		return partyMapper.getGroupById(groupId);
 	}
@@ -62,6 +65,10 @@ public class PartyService implements UserDetailsService {
 	}
 	public boolean checkNick(String nick) {
 		return partyMapper.isValidNick(nick);
+	}
+	
+	public boolean checkGroupName(String groupName) {
+		return partyMapper.isValidGroupName(groupName);
 	}
 	
 	public int manageMember(SignUpDto signUpRequest) {

@@ -21,6 +21,8 @@ public interface PartyMapper extends GeneralMapper {
 	public List<RoleVO> listAllAnonymRoles();
 	
 	public List<RoleVO> listAllDefaultRolesOf(@Param("group") GroupVO group);
+	
+	public List<ActVO> listAllAct();
 
 	
 	public GroupVO getGroupById(String groupId);
@@ -35,6 +37,8 @@ public interface PartyMapper extends GeneralMapper {
 	public boolean isValidLoginId(String loginId);
 	
 	public boolean isValidNick(String nick);
+	
+	public boolean isValidGroupName(String groupName);
 	
 	
 	public int createPerson(@Param("person") PersonVO person);
