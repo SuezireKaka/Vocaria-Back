@@ -228,6 +228,15 @@
 		values(#{account.id}, #{account.passWord}, #{account.nick}, #{account.introduction}, #{account.owner.id});
 	</insert>
 	
+	<!-- public int createGroup(@Param("group") GroupVO group);  -->
+	<insert id="createGroup">
+		<selectKey keyProperty="group.id" resultType="String" order="BEFORE">
+    		select NEXT_PK('s_party')
+  		</selectKey>
+  		insert into t_party(id, descrim, name, birth)
+  		values (#{group.id}, 'G', #{group.name}, curdate())
+	</insert>
+	
 	<!-- public int grantRolesToUser(@Param("account") AccountVO account,
 			@Param("rolesList") List<RoleVO> rolesList); -->
 	<insert id="grantRolesToUser">
@@ -239,6 +248,12 @@
         		#{account.id} as account,
         		#{role.id} as role
         </foreach> sub;
+	</insert>
+	
+	<!-- public int grantGroupManager(@Param("account") AccountVO account,
+			@Param("group") GroupVO group); -->
+	<insert id="grantGroupManager">
+		call GRANT_GROUP_MANAGER(#{account.id}, #{group.id})
 	</insert>
 	
 	<!-- public int depriveRolesFromUser(@Param("account") AccountVO account,

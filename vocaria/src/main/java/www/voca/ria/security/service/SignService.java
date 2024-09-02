@@ -19,7 +19,6 @@ import www.voca.ria.security.config.JwtTokenProvider;
 import www.voca.ria.security.model.SignInDTO;
 import www.voca.ria.security.model.SignInResultDto;
 import www.voca.ria.security.model.SignUpResultDto;
-import www.voca.ria.vocabulary.service.VocaService;
 
 @Service
 public class SignService {

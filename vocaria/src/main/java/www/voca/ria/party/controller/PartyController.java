@@ -77,17 +77,17 @@ public class PartyController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	// /party/anonymous/check/nick/adfes
+	@GetMapping("/anonymous/check/nick/{nick}")
+	public ResponseEntity<Boolean> checkNick(@PathVariable String nick) {
+		return ResponseEntity.ok(partyService.checkNick(nick));
+	}
+	
 	// /party/check/groupName/addr
 	@GetMapping("/check/groupName/{groupName}")
 	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
 	public ResponseEntity<Boolean> checkGroupName(@PathVariable String groupName) {
 		return ResponseEntity.ok(partyService.checkGroupName(groupName));
-	}
-
-	// /party/anonymous/check/nick/adfes
-	@GetMapping("/anonymous/check/nick/{nick}")
-	public ResponseEntity<Boolean> checkNick(@PathVariable String nick) {
-		return ResponseEntity.ok(partyService.checkNick(nick));
 	}
 	
 	// /party/anonymous/check/loginId/addr
@@ -101,6 +101,14 @@ public class PartyController {
 	@PostMapping("/anonymous/createMember")
 	public ResponseEntity<Integer> createMember(@RequestBody SignUpDto signUpRequest) {
 		return ResponseEntity.ok(partyService.manageMember(signUpRequest));
+	}
+	
+	// /party/anonymous/createGroup
+	@PostMapping("/anonymous/createGroup")
+	public ResponseEntity<Integer> createGroup(
+			@AuthenticationPrincipal AccountVO owner,
+			@RequestBody GroupVO group) {
+		return ResponseEntity.ok(partyService.manageGroup(owner, group));
 	}
 
 	/*

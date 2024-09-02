@@ -1,5 +1,6 @@
 package www.voca.ria.party.model.role;
 
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -94,6 +94,11 @@ public class PartyService implements UserDetailsService {
 			& partyMapper.createAccount(account)
 			& partyMapper.grantRolesToUser(account, defaultRoleList);
 	}
+	
+	public int manageGroup(AccountVO owner, GroupVO group) {
+		return partyMapper.createGroup(group)
+				& partyMapper.grantGroupManager(owner, group);
+	}
 
 	public int syncRole(String groupId, List<GrantDTO> grantList) {
 		if (grantList.size() == 0) {
