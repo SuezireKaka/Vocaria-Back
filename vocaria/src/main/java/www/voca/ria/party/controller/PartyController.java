@@ -105,7 +105,7 @@ public class PartyController {
 	
 	// /party/createGroup
 	@PostMapping("/createGroup")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'TM')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
 	public ResponseEntity<Integer> createGroup(
 			@AuthenticationPrincipal AccountVO owner,
 			@RequestBody GroupVO group) {
