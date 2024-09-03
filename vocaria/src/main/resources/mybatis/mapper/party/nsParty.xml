@@ -61,6 +61,7 @@
 		  from t_party
 		 where descrim = 'G'
 		   and id > '0000'
+		 order by id desc
 		 limit ${page.onePageNum}
 		offset ${page.offset}
 	</select>

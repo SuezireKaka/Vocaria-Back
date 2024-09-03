@@ -66,5 +66,11 @@ public class AccountVO extends TimeEntity implements UserDetails {
 	public void encodePswd(PasswordEncoder pswdEnc) {
 		this.passWord = pswdEnc.encode(passWord);	
 	}
+	
+	public boolean isJoined(String groupId) {
+		return roleList.stream()
+				.map(role -> role.getProvider().getId().equals(groupId))
+				.reduce(false, (a, b) -> a || b);
+	}
 
 }

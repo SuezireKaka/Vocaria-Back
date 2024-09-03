@@ -10,8 +10,6 @@ public class GroupDTO {
 	public GroupDTO(GroupVO group, AccountVO client) {
 		this.group = group;
 		
-		this.isJoined = client.getRoleList().stream()
-			.map(role -> role.getProvider().getId().equals(group.getId()))
-			.reduce(true, (a, b) -> a && b);
+		this.isJoined = client.isJoined(group.getId());
 	}
 }

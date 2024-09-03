@@ -109,7 +109,6 @@ public class PartyController {
 	public ResponseEntity<Boolean> checkLoginId(@PathVariable String loginId) {
 		return ResponseEntity.ok(partyService.checkLoginId(loginId));
 	}
-
 	
 	// /party/anonymous/createMember
 	@PostMapping("/anonymous/createMember")
@@ -124,6 +123,18 @@ public class PartyController {
 			@AuthenticationPrincipal AccountVO owner,
 			@RequestBody GroupVO group) {
 		return ResponseEntity.ok(partyService.manageGroup(owner, group));
+	}
+	
+	// /party/toggleJoin/0003
+	@PostMapping("/toggleJoin/{groupId}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PM')")
+	public ResponseEntity<Integer> toggleJoin(
+			@AuthenticationPrincipal AccountVO user,
+			@PathVariable String groupId) throws BusinessException {
+		if (groupId.equals("0000")) {
+			throw new BusinessException(ErrorCode.NOT_TOGGLABLE);
+		}
+		return ResponseEntity.ok(partyService.toggleJoin(user, groupId));
 	}
 
 	/*

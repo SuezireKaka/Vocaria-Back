@@ -137,6 +137,19 @@ public class PartyService implements UserDetailsService {
 		return result;
 	}
 
+	public int toggleJoin(AccountVO user, String groupId) {
+		if (user.isJoined(groupId)) {
+			return partyMapper.depriveRolesFromUser(user, groupId);
+		}
+		
+		List<RoleVO> defaultRoleList = partyMapper.listAllDefaultRolesOf(
+				GroupVO.builder()
+					.id(groupId)
+					.build());
+		
+		return partyMapper.grantRolesToUser(user, defaultRoleList);
+	}
+
 }
 
 

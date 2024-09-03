@@ -29,6 +29,8 @@ public enum ErrorCode {
 	INVALID_STRATEGY(200, "9998", "Invalid Strategy Exception"),
 	
 	NOT_CONCERNED(200, "9999", "Not Concerned Exception"),
+	
+	NOT_TOGGLABLE(200, "9999", "Not Togglable Exception"),
 
 	; // End
 
