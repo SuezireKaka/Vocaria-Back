@@ -8,7 +8,7 @@
 		type="www.voca.ria.party.model.PartyVO">
 		<result property="name" column="name" />
 		<result property="birthDate" column="birth" />
-		<discriminator javaType="String" column="discrim">
+		<discriminator javaType="String" column="descrim">
 			<case value="P" resultMap="rmPersonVO" />
          	<case value="G" resultMap="rmGroupVO" />
 		</discriminator>
@@ -55,24 +55,36 @@
 		<result property="info" column="info" />
 	</resultMap>
 	
+	<!-- 	public List<GroupVO> listAllGroup(@Param("page") PageDTO page); -->
+	<select id="listAllGroup" resultMap="rmGroupVO">
+		select *
+		  from t_party
+		 where descrim = 'G'
+		   and id > '0000'
+		 limit ${page.onePageNum}
+		offset ${page.offset}
+	</select>
+	
 	<!-- 	public List<AccountVO> listAllAccount(@Param("groupId") String groupId,
-				@Param("page") PageDTO page); -->
+			@Param("page") PageDTO page); -->
 	<select id="listAllAccount" resultMap="rmAccountVO">
-		select acc.id, acc.nick, acc.upt_dt,
-		    	owner.id own_id, owner.name own_name,
-		    	role.id role_id, role.name role_name,
-		    	prov.id role_prov_id
+		select acc.*,
+				owner.id own_id,
+					owner.descrim own_descrim,
+					owner.name own_name,
+				role.id role_id,
+					role.provider role_prov_id,
+					role.name role_name,
+					role.info role_info,
+					role.dflt role_dflt
 		  from t_account acc
 		  left outer join t_party owner
 		    on owner.id = acc.owner
-		  left outer join rel_account_role allow
-		    on allow.account = acc.id
+		  left outer join rel_account_role rel
+		    on rel.account = acc.id
 		  left outer join t_role role
-		    on role.id = allow.role
-		  left outer join t_party prov
-		    on role.provider = prov.id
-		 where prov.id = #{groupId}
-		 order by reg_dt desc
+		    on role.id = rel.role
+		 where role.provider = #{groupId}
 		 limit ${page.onePageNum}
 		offset ${page.offset}
 	</select>
@@ -109,7 +121,7 @@
 		  left outer join sys_act act
 		    on allow.act = act.act
 		 where r.provider = #{group.id}
-		   and r.dflt = 1;
+		   and r.dflt = 1
 	</select>
 	
 	<!-- 	public List<ActVO> listAllAct(); -->

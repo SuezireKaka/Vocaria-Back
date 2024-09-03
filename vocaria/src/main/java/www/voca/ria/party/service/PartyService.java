@@ -29,6 +29,16 @@ public class PartyService implements UserDetailsService {
 	@Autowired
 	private PasswordEncoder pswdEnc;
 	
+	public Pair<List<GroupVO>, PageDTO> listAllGroup(int pageNum) {
+		PageDTO page = new PageDTO(pageNum);
+		
+		List<GroupVO> accountList = partyMapper.listAllGroup(page);
+		
+		page.buildPagination(partyMapper.getFoundRows());
+		
+		return new Pair<>(accountList, page);
+	}
+	
 	public Pair<List<AccountVO>, PageDTO> listAllAccount(String groupId, int pageNum) {
 		PageDTO page = new PageDTO(pageNum);
 		

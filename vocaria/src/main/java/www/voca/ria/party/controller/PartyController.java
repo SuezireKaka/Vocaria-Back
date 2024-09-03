@@ -32,6 +32,16 @@ import www.voca.ria.party.service.PartyService;
 public class PartyController {
 	@Autowired
 	private PartyService partyService;
+	
+	// /party/listAllGroup/1
+	@GetMapping("/listAllAccount/{pageNum}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PM')")
+	public ResponseEntity<Pair<List<GroupVO>, PageDTO>> listAllGroup(
+			@PathVariable int pageNum) {
+		Pair<List<GroupVO>, PageDTO> result =
+				partyService.listAllGroup(pageNum);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	// /party/listAllAccount/0000/1
 	@GetMapping("/listAllAccount/{groupId}/{pageNum}")

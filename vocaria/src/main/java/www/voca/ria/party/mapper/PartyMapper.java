@@ -15,6 +15,8 @@ import www.voca.ria.party.model.role.RoleVO;
 
 @Mapper
 public interface PartyMapper extends GeneralMapper {
+	public List<GroupVO> listAllGroup(@Param("page") PageDTO page);
+	
 	public List<AccountVO> listAllAccount(@Param("groupId") String groupId,
 			@Param("page") PageDTO page);
 	
@@ -57,6 +59,5 @@ public interface PartyMapper extends GeneralMapper {
 	
 	public int depriveRolesFromUser(@Param("account") AccountVO account,
 			@Param("groupId") String groupId);
-
 	
 }
