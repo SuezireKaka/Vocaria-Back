@@ -103,8 +103,9 @@ public class PartyController {
 		return ResponseEntity.ok(partyService.manageMember(signUpRequest));
 	}
 	
-	// /party/anonymous/createGroup
-	@PostMapping("/anonymous/createGroup")
+	// /party/createGroup
+	@PostMapping("/createGroup")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'TM')")
 	public ResponseEntity<Integer> createGroup(
 			@AuthenticationPrincipal AccountVO owner,
 			@RequestBody GroupVO group) {
