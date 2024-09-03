@@ -1,6 +1,7 @@
 package www.voca.ria.party.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.mapper.PartyMapper;
 import www.voca.ria.party.model.AccountVO;
+import www.voca.ria.party.model.GroupDTO;
 import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.PersonVO;
 import www.voca.ria.party.model.SignUpDto;
@@ -29,14 +31,18 @@ public class PartyService implements UserDetailsService {
 	@Autowired
 	private PasswordEncoder pswdEnc;
 	
-	public Pair<List<GroupVO>, PageDTO> listAllGroup(int pageNum) {
+	public Pair<List<GroupDTO>, PageDTO> listAllGroup(AccountVO user, int pageNum) {
 		PageDTO page = new PageDTO(pageNum);
 		
-		List<GroupVO> accountList = partyMapper.listAllGroup(page);
+		List<GroupVO> groupList = partyMapper.listAllGroup(page);
+		
+		List<GroupDTO> result = groupList.stream()
+				.map(group -> new GroupDTO(group, user))
+				.collect(Collectors.toList());
 		
 		page.buildPagination(partyMapper.getFoundRows());
 		
-		return new Pair<>(accountList, page);
+		return new Pair<>(result, page);
 	}
 	
 	public Pair<List<AccountVO>, PageDTO> listAllAccount(String groupId, int pageNum) {
@@ -57,7 +63,6 @@ public class PartyService implements UserDetailsService {
 		return partyMapper.getGroupById(groupId);
 	}
 	
-	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		return partyMapper.getAccountById(id);
 	}

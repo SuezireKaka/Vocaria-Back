@@ -20,6 +20,7 @@ import www.voca.ria.framework.exception.ErrorCode;
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
+import www.voca.ria.party.model.GroupDTO;
 import www.voca.ria.party.model.GroupVO;
 import www.voca.ria.party.model.SignUpDto;
 import www.voca.ria.party.model.role.ActVO;
@@ -34,18 +35,20 @@ public class PartyController {
 	private PartyService partyService;
 	
 	// /party/listAllGroup/1
-	@GetMapping("/listAllAccount/{pageNum}")
+	@GetMapping("/listAllGroup/{pageNum}")
 	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PM')")
-	public ResponseEntity<Pair<List<GroupVO>, PageDTO>> listAllGroup(
+	public ResponseEntity<Pair<List<GroupDTO>, PageDTO>> listAllGroup(
+			@AuthenticationPrincipal AccountVO user,
 			@PathVariable int pageNum) {
-		Pair<List<GroupVO>, PageDTO> result =
-				partyService.listAllGroup(pageNum);
+		Pair<List<GroupDTO>, PageDTO> result =
+				partyService.listAllGroup(user, pageNum);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	// /party/listAllAccount/0000/1
 	@GetMapping("/listAllAccount/{groupId}/{pageNum}")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'SM')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'SM')"
+			+ "or @actScopeSpel.isAbleToRunAny(authentication, '0000', 'SM')")
 	public ResponseEntity<Pair<List<AccountVO>, PageDTO>> listAllAccount(
 			@AuthenticationPrincipal AccountVO manager,
 			@PathVariable String groupId, @PathVariable int pageNum) {
@@ -80,7 +83,8 @@ public class PartyController {
 	
 	// /party/getGroupById/0000
 	@GetMapping("/getGroupById/{groupId}")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'SM')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, #groupId, 'SM')"
+			+ "or @actScopeSpel.isAbleToRunAny(authentication, '0000', 'SM')")
 	public ResponseEntity<GroupVO> getGroupById(
 			@PathVariable String groupId) {
 		GroupVO result = partyService.getGroupById(groupId);
