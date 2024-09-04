@@ -7,15 +7,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import www.voca.ria.party.model.role.ActVO;
-import www.voca.ria.party.model.role.RoleVO;
 import www.voca.ria.party.service.PartyService;
 
 @Component
-public class ActScopeSpel {
+public class ActScopeSpel extends CommonSpel {
 	@Autowired
 	private PartyService partyService;
 	
@@ -38,10 +36,5 @@ public class ActScopeSpel {
 		ableActs.retainAll(requiredActs);
 		
 		return ableActs.size() > 0;
-	}
-	
-	private RoleVO calcRole(GrantedAuthority auth) {
-		String[] parsedAuth = auth.getAuthority().split(RoleVO.AUTHORITY_SEPERATOR);
-		return partyService.getRoleByProviderAndName(parsedAuth[0], parsedAuth[1]);
 	}
 }
