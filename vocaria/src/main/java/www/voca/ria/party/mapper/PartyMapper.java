@@ -22,6 +22,8 @@ public interface PartyMapper extends GeneralMapper {
 	
 	public List<RoleVO> listAllAnonymRoles();
 	
+	public List<AccountVO> listStudents(@Param("accountArray") String[] accountArray);
+	
 	public List<RoleVO> listAllDefaultRolesOf(@Param("group") GroupVO group);
 	
 	public List<ActVO> listAllAct();

@@ -20,6 +20,8 @@ import www.voca.ria.party.model.role.RoleVO;
 @NoArgsConstructor
 @JsonIgnoreProperties({"passWord"})
 public class AccountVO extends TimeEntity implements UserDetails {
+	public static final String CHAIN_SEPERATOR = "-";
+	
 	private static final long serialVersionUID = 1L;
 	
 	private String passWord;

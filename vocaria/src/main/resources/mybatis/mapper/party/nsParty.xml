@@ -90,6 +90,29 @@
 		offset ${page.offset}
 	</select>
 	
+	<!-- 	public List<AccountVO> listStudents(@Param("accountArray") String[] accountArray); -->
+	<select id="listStudents" resultMap="rmAccountVO">
+		select acc.id,
+				role.id role_id,
+					role.provider role_prov_id,
+					role.name role_name
+		  from t_account acc
+		  left outer join rel_account_role grt
+		    on grt.account = acc.id
+		  left outer join t_role role
+		    on role.id = grt.role
+		  left outer join rel_role_act rel
+		    on rel.role = role.id
+		  left outer join sys_act act
+		    on rel.act = act.act
+		 where acc.id in <foreach collection="accountArray" item="studentId"
+		 	open="(" close=")" separator=", "
+		 >
+			 #{studentId}
+		 </foreach>
+		   and act.act = 'PS'
+	</select>
+	
 	<!-- 	public List<RoleVO> listAllAnonymRoles(); -->
 	<select id="listAllAnonymRoles" resultMap="rmRoleVO">
 		select r.*,

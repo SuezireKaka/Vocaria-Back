@@ -55,6 +55,10 @@ public class PartyService implements UserDetailsService {
 		return new Pair<>(accountList, page);
 	}
 	
+	public List<AccountVO> listStudents(String[] accountArray) {
+		return partyMapper.listStudents(accountArray);
+	}
+	
 	public List<ActVO> listAllAct() {
 		return partyMapper.listAllAct();
 	}

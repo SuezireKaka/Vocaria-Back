@@ -22,12 +22,24 @@ import www.voca.ria.mission.service.MissionService;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy.StrategyType;
 import www.voca.ria.party.model.AccountVO;
+import www.voca.ria.security.spel.GroupScopeSpel;
 
 @RestController
 @RequestMapping("/mission")
 public class MissionController {
 	@Autowired
 	private MissionService missionService;
+	@Autowired
+	private GroupScopeSpel spel;
+	
+	// /mission/testSpel/account1-account2-account3
+	@GetMapping("/testSpel/{accountIdChain}")
+	@PreAuthorize("@groupScopeSpel.isTeachableChain(authentication, #accountIdChain)")
+	public ResponseEntity<Boolean> buildMission(@PathVariable String accountIdChain) {
+		spel.getImsiResult();
+		
+		return new ResponseEntity<>(true, HttpStatus.OK);
+	}
 	
 	// /mission/anonymous/listAllStrategyType
 	@GetMapping("/anonymous/listAllStrategyType")
@@ -49,9 +61,9 @@ public class MissionController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	// /mission/anonymous/buildMission/account1-account2-account3
-	@PostMapping("/anonymous/buildMission/{accountIdChain}")
-	// @PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
+	// /mission/buildMission/account1-account2-account3
+	@PostMapping("/buildMission/{accountIdChain}")
+	@PreAuthorize("@groupScopeSpel.isTeachableChain(authentication, #accountIdChain)")
 	public ResponseEntity<Boolean> buildMission(@AuthenticationPrincipal AccountVO student,
 			@PathVariable String accountIdChain,
 			@RequestBody QuestionBuildStrategy strategy) throws BusinessException {
