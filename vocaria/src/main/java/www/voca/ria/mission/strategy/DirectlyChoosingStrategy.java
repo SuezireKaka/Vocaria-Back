@@ -20,7 +20,7 @@ public class DirectlyChoosingStrategy implements QuestionBuildStrategy {
 		
 		@Override
 		public String toString() {
-			return vocaId + SEPERATOR + chapterPos + SEPERATOR + questionPos;
+			return vocaId + SEPARATOR + chapterPos + SEPARATOR + questionPos;
 		}
 	}
 

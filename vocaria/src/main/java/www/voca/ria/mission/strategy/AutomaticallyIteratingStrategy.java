@@ -19,7 +19,7 @@ public class AutomaticallyIteratingStrategy implements QuestionBuildStrategy {
 		
 		@Override
 		public String toString() {
-			return vocaId + SEPERATOR + iterCount;
+			return vocaId + SEPARATOR + iterCount;
 		}
 	}
 

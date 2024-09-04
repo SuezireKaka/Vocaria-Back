@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 	@Type(value = DirectlyChoosingStrategy.class, name = "DIRECT")
 })
 public interface QuestionBuildStrategy {
-	public static final String SEPERATOR = " - ";
+	public static final String SEPARATOR = "-";
 
 	public StrategyType getType();
 
