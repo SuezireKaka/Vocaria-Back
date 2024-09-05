@@ -39,7 +39,7 @@ public class GroupScopeSpel extends CommonSpel {
 								role.getProvider().getId())))
 				.collect(Collectors.toList());
 		
-		imsiList = filteredStudentList;
+		this.imsiList = filteredStudentList;
 		
 		return filteredStudentList.size() > 0;
 	}

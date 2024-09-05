@@ -6,18 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import www.voca.ria.framework.mapper.GeneralMapper;
-import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.vocabulary.model.VocaVO;
 
 @Mapper
-public interface MissionMapper extends GeneralMapper {
-	public List<VocaVO> listAllVoca(@Param("page") PageDTO page);
-	
-	public VocaVO getVocaById(@Param("id") String id);
-	
+public interface MissionMapper extends GeneralMapper {	
 	public int setupTodayMission(@Param("student") AccountVO student);
 
-	
+	public int evaluate(@Param("questionIdList") List<String> questionIdList,
+			@Param("chooseList") List<String> chooseList);
 
 }

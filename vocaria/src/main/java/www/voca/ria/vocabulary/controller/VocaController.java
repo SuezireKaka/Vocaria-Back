@@ -79,14 +79,3 @@ public class VocaController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-

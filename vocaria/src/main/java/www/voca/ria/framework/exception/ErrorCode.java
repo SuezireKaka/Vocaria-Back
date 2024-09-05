@@ -31,6 +31,8 @@ public enum ErrorCode {
 	NOT_CONCERNED(200, "9999", "Not Concerned Exception"),
 	
 	NOT_TOGGLABLE(200, "9999", "Not Togglable Exception"),
+	
+	INVALID_BODY(200, "9998", "Invalid Body Exception"),
 
 	; // End
 

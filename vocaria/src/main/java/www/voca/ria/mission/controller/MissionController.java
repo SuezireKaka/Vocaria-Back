@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import www.voca.ria.framework.exception.BusinessException;
 import www.voca.ria.framework.exception.ErrorCode;
+import www.voca.ria.mission.model.ChoiceDTO;
 import www.voca.ria.mission.model.MissionDTO;
 import www.voca.ria.mission.service.MissionService;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
@@ -48,6 +49,19 @@ public class MissionController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	// /mission/evaluate
+	@PostMapping("/evaluate")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
+	public ResponseEntity<Integer> evaluate(@RequestBody ChoiceDTO choice,
+			@AuthenticationPrincipal AccountVO student) throws BusinessException {
+		if (! choice.isMatching()) {
+			throw new BusinessException(ErrorCode.INVALID_BODY);
+		}
+		return new ResponseEntity<>(
+				missionService.evaluate(student, choice)
+				, HttpStatus.OK);
+	}
+	
 	// /mission/getMission/somewhatAccountId/2024-08-14
 	@GetMapping("/getMission/{accountId}/{dateString}")
 	@PreAuthorize("(@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')"
@@ -64,7 +78,7 @@ public class MissionController {
 	// /mission/buildMission/account1-account2-account3
 	@PostMapping("/buildMission/{accountIdChain}")
 	@PreAuthorize("@groupScopeSpel.isTeachableChain(authentication, #accountIdChain)")
-	public ResponseEntity<Boolean> buildMission(@AuthenticationPrincipal AccountVO student,
+	public ResponseEntity<Boolean> buildMission(
 			@PathVariable String accountIdChain,
 			@RequestBody QuestionBuildStrategy strategy) throws BusinessException {
 		List<String> parsedData;

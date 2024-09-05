@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import www.voca.ria.mission.mapper.MissionMapper;
+import www.voca.ria.mission.model.ChoiceDTO;
 import www.voca.ria.mission.model.MissionDTO;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy.StrategyType;
@@ -41,5 +42,10 @@ public class MissionService {
 		return false;
 	}
 
-	
+	public int evaluate(AccountVO student, ChoiceDTO choice) {
+		List<String> questionIdList = choice.getQuestionIdList();
+		List<String> chooseList = choice.getChooseList();
+		
+		return missionMapper.evaluate(questionIdList, chooseList);
+	}
 }

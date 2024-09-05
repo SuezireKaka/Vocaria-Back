@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="www.voca.ria.mission.mapper.MissionMapper">
+	<select id="evaluate" resultType="int">
+		select sum(if(st.ans > 0, 1, 0)) score
+		  from <foreach collection="questionIdList" item="questId" index="idx"
+		  	open="(" separator="union all" close=")"
+		  >
+		    select choice.choice = #{chooseList[${idx}]} ans
+		      from t_question quest
+		      left outer join t_choice choice
+		        on choice.question = quest.id
+		     where quest.id = #{questId}
+		       and choice.answer = 1
+		  </foreach> st
+	</select>
+</mapper>
