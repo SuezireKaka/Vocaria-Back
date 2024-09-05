@@ -18,14 +18,24 @@
 		type="www.voca.ria.vocabulary.model.ChapterVO">
 		<result property="name" column="name" />
 		<result property="questionNumber" column="qnum" />
-		<association property="questionList" columnPrefix="qst_"
-				resultMap="rmChapterVO" />
+		<collection property="questionList" columnPrefix="qst_"
+				resultMap="rmQuestionVO">
+		</collection>
 	</resultMap>
 	
 	<resultMap id="rmQuestionVO" extends="nsEntity.rmEntity"
-		type="www.voca.ria.vocabulary.model.ChapterVO">
-		<result property="name" column="name" />
-		<result property="choiceList" column="choice" />
+		type="www.voca.ria.vocabulary.model.QuestionVO">
+		<result property="question" column="question" />
+		<association property="subject" columnPrefix="subj_"
+				resultMap="rmSubjectVO" />
+		<collection property="choiceList" ofType="String">
+			<result column="choice" javaType="String"/>
+		</collection>
+	</resultMap>
+	
+	<resultMap id="rmSubjectVO" extends="nsEntity.rmEntity"
+		type="www.voca.ria.vocabulary.model.SubjectVO">
+		<result property="subject" column="subject" />
 	</resultMap>
 	
 	<!-- public List<VocaVO> listAllVoca(@Param("page") PageDTO page); -->
@@ -61,16 +71,38 @@
 	<select id="getVocaById" resultMap="rmVocaVO">
 		select voca.*,
 		    maker.id mkr_id, maker.nick mkr_nick,
-		    chapter.id chpt_id, chapter.name chpt_name, count(rel.pos) chpt_qnum
+		    chapter.id chpt_id, chapter.name chpt_name, count(rec.pos) chpt_qnum
 		  from t_voca voca
 		  left outer join t_account maker
 		    on maker.id = voca.maker
 		  left outer join t_chapter chapter
 		    on chapter.voca = voca.id
-		  left outer join rel_chapter_question rel
-		    on rel.chapter = chapter.id
+		  left outer join rel_chapter_question rec
+		    on rec.chapter = chapter.id
 		 where voca.id = #{id}
-		 group by rel.chapter
+		 group by rec.chapter
+	</select>
+	
+	<!-- public ChapterVO getChapter(@Param("vocaId") String vocaId,
+			@Param("chapterNum") int chapterNum); -->
+	<select id="getChapter" resultMap="rmChapterVO">
+		select chapter.id, chapter.name,
+				max(rec.pos) over (partition by chapter.id) qnum,
+				quest.id qst_id, quest.question qst_question,
+					subj.id qst_subj_id, subj.subject qst_subj_subject,
+					choice.choice qst_choice
+		  from t_chapter chapter
+		  left outer join rel_chapter_question rec
+		    on rec.chapter = chapter.id
+		  left outer join t_question quest
+		    on quest.id = rec.question
+		  left outer join t_subject subj
+		    on subj.id = quest.subject
+		  left outer join t_choice choice
+		    on choice.question = quest.id
+		 where chapter.voca = #{vocaId}
+		   and chapter.pos = ${chapterNum}
+		 order by rec.pos, quest.id, rand()
 	</select>
 	
 	<!-- public boolean isSubscribing(@Param("student") AccountVO student,

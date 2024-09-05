@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
+import www.voca.ria.vocabulary.model.ChapterVO;
 import www.voca.ria.vocabulary.model.VocaVO;
 import www.voca.ria.vocabulary.service.VocaService;
 
@@ -48,6 +49,15 @@ public class VocaController {
 	@GetMapping("/anonymous/getVocaById/{vocaId}")
 	public ResponseEntity<VocaVO> getVocaById(@PathVariable String vocaId) {
 		VocaVO result = vocaService.getVocaById(vocaId);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// /voca/getChapter/0000/1
+	@GetMapping("/getChapter/{vocaId}/{chapterNum}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
+	public ResponseEntity<ChapterVO> getChapter(@PathVariable String vocaId,
+			@PathVariable int chapterNum) {
+		ChapterVO result = vocaService.getChapter(vocaId, chapterNum);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	

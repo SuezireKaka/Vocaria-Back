@@ -9,6 +9,7 @@ import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.party.model.AccountVO;
 import www.voca.ria.vocabulary.mapper.VocaMapper;
+import www.voca.ria.vocabulary.model.ChapterVO;
 import www.voca.ria.vocabulary.model.VocaVO;
 
 @Service
@@ -38,6 +39,11 @@ public class VocaService {
 	
 	public VocaVO getVocaById(String id) {
 		return vocaMapper.getVocaById(id);
+	}
+	
+	public ChapterVO getChapter(String vocaId, int chapterNum) {
+		ChapterVO result = vocaMapper.getChapter(vocaId, chapterNum);
+		return result;
 	}
 	
 	public boolean isSubscribing(AccountVO student, String vocaId) {
