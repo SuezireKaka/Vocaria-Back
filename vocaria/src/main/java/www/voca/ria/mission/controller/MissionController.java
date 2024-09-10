@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import www.voca.ria.framework.exception.BusinessException;
 import www.voca.ria.framework.exception.ErrorCode;
+import www.voca.ria.framework.model.structure.PageDTO;
+import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.mission.model.ChoiceDTO;
-import www.voca.ria.mission.model.MissionDTO;
+import www.voca.ria.mission.model.MissionVO;
 import www.voca.ria.mission.service.MissionService;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy.StrategyType;
@@ -42,6 +44,20 @@ public class MissionController {
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 	
+	// /mission/getMission/somewhatAccountId/2024-08-14/1
+	@GetMapping("/getMission/{accountId}/{dateString}/{pageNum}")
+	@PreAuthorize("(@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')"
+			+ " and "
+			+ "principal.getId() == #accountId"
+			+ ") or "
+			+ "@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
+	public ResponseEntity<Pair<List<MissionVO>, PageDTO>> listAllMission(@AuthenticationPrincipal AccountVO student,
+			@PathVariable String accountId, @PathVariable String dateString,
+			@PathVariable int pageNum) {
+		Pair<List<MissionVO>, PageDTO> result = missionService.listAllMission(accountId, dateString, pageNum);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	// /mission/anonymous/listAllStrategyType
 	@GetMapping("/anonymous/listAllStrategyType")
 	public ResponseEntity<List<StrategyType>> listAllVoca() {
@@ -60,19 +76,6 @@ public class MissionController {
 		return new ResponseEntity<>(
 				missionService.evaluate(student, choice)
 				, HttpStatus.OK);
-	}
-	
-	// /mission/getMission/somewhatAccountId/2024-08-14
-	@GetMapping("/getMission/{accountId}/{dateString}")
-	@PreAuthorize("(@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')"
-			+ " and "
-			+ "principal.getId() == #accountId"
-			+ ") or "
-			+ "@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
-	public ResponseEntity<MissionDTO> getMission(@AuthenticationPrincipal AccountVO student,
-			@PathVariable String accountId, @PathVariable String dateString) {
-		MissionDTO result = missionService.getMission(accountId, dateString);
-		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	// /mission/buildMission/account1-account2-account3
