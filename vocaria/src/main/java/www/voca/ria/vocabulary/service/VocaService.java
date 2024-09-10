@@ -22,7 +22,7 @@ public class VocaService {
 		
 		List<VocaVO> vocaList = vocaMapper.listAllVoca(page);
 		
-		page.buildPagination(vocaMapper.getFoundRows());
+		page.buildPagination(vocaMapper.countAllVoca());
 		
 		return new Pair<>(vocaList, page);
 	}
@@ -32,7 +32,7 @@ public class VocaService {
 		
 		List<VocaVO> vocaList = vocaMapper.listAllSubscribes(student, page);
 		
-		page.buildPagination(vocaMapper.getFoundRows());
+		page.buildPagination(vocaMapper.countAllSubscribes(student));
 		
 		return new Pair<>(vocaList, page);
 	}

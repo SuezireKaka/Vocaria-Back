@@ -49,6 +49,11 @@
 		 limit ${page.onePageNum}
 		offset ${page.offset}
 	</select>
+	<!-- public long countAllVoca(); -->
+	<select id="countAllVoca" resultType="long">
+		select count(*)
+		  from t_voca voca
+	</select>
 	
 	<!-- public List<VocaVO> listAllSubscribes(@Param("student") AccountVO student,
 			@Param("page") PageDTO page); -->
@@ -65,6 +70,15 @@
 		 order by id desc
 		 limit ${page.onePageNum}
 		offset ${page.offset}
+	</select>
+	<!-- public long countAllSubscribes(@Param("student") AccountVO student); -->
+	<select id="countAllSubscribes" resultType="long">
+		select count(*)
+		  from t_voca voca
+		  left outer join t_subscribe subs
+		    on subs.voca = voca.id
+		 where subs.account = #{student.id}
+		   and subs.alive = 1
 	</select>
 	
 	<!-- public VocaVO getVocaById(@Param("id") String id); -->

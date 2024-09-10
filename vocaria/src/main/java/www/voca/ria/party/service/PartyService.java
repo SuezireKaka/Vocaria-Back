@@ -40,7 +40,7 @@ public class PartyService implements UserDetailsService {
 				.map(group -> new GroupDTO(group, user))
 				.collect(Collectors.toList());
 		
-		page.buildPagination(partyMapper.getFoundRows());
+		page.buildPagination(partyMapper.countAllGroup());
 		
 		return new Pair<>(result, page);
 	}
@@ -50,7 +50,7 @@ public class PartyService implements UserDetailsService {
 		
 		List<AccountVO> accountList = partyMapper.listAllAccount(groupId, page);
 		
-		page.buildPagination(partyMapper.getFoundRows());
+		page.buildPagination(partyMapper.countAllGroup());
 		
 		return new Pair<>(accountList, page);
 	}

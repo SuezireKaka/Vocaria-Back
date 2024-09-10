@@ -25,7 +25,7 @@ public class MissionService {
 		
 		List<MissionVO> missionList = missionMapper.listAllMission(accountId, dateString, page);
 		
-		page.buildPagination(missionMapper.getFoundRows());
+		page.buildPagination(missionMapper.countAllMission(accountId, dateString));
 		
 		return new Pair<>(missionList, page);
 	}

@@ -65,6 +65,13 @@
 		 limit ${page.onePageNum}
 		offset ${page.offset}
 	</select>
+	<!-- 	public long countAllGroup(); -->
+	<select id="countAllGroup" resultType="long">
+		select count(*)
+		  from t_party
+		 where descrim = 'G'
+		   and id > '0000'
+	</select>
 	
 	<!-- 	public List<AccountVO> listAllAccount(@Param("groupId") String groupId,
 			@Param("page") PageDTO page); -->
@@ -88,6 +95,16 @@
 		 where role.provider = #{groupId}
 		 limit ${page.onePageNum}
 		offset ${page.offset}
+	</select>
+	<!-- 	public long countAllAccount(@Param("groupId") String groupId); -->
+	<select id="listAllAccount" resultType="long">
+		select count(distinct acc.id)
+		  from t_account acc
+		  left outer join rel_account_role rel
+		    on rel.account = acc.id
+		  left outer join t_role role
+		    on role.id = rel.role
+		 where role.provider = #{groupId}
 	</select>
 	
 	<!-- 	public List<AccountVO> listStudents(@Param("accountArray") String[] accountArray); -->

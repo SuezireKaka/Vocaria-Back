@@ -15,9 +15,11 @@ import www.voca.ria.vocabulary.model.VocaVO;
 public interface VocaMapper extends GeneralMapper {
 	
 	public List<VocaVO> listAllVoca(@Param("page") PageDTO page);
+	public long countAllVoca();
 	
 	public List<VocaVO> listAllSubscribes(@Param("student") AccountVO student,
 			@Param("page") PageDTO page);
+	public long countAllSubscribes(@Param("student") AccountVO student);
 	
 	
 	public VocaVO getVocaById(@Param("id") String id);

@@ -15,10 +15,13 @@ import www.voca.ria.party.model.role.RoleVO;
 
 @Mapper
 public interface PartyMapper extends GeneralMapper {
+	
 	public List<GroupVO> listAllGroup(@Param("page") PageDTO page);
+	public long countAllGroup();
 	
 	public List<AccountVO> listAllAccount(@Param("groupId") String groupId,
 			@Param("page") PageDTO page);
+	public long countAllAccount(@Param("groupId") String groupId);
 	
 	public List<RoleVO> listAllAnonymRoles();
 	

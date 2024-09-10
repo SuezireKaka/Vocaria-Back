@@ -41,6 +41,14 @@
 		  left outer join t_question quest
     	    on quest.id = rel.question
 	</select>
+	<!-- public long countAllMission(@Param("accountId") String accountId,
+			@Param("date") String dateString); -->
+	<select id="countAllMission" resultType="long">
+		select count(*)
+		  from t_mission
+		 where time = #{date}
+		   and tester = #{accountId}
+	</select>
 	
 	<!-- public int evaluate(@Param("questionIdList") List<String> questionIdList,
 			@Param("chooseList") List<String> chooseList); -->
