@@ -97,7 +97,7 @@
 		offset ${page.offset}
 	</select>
 	<!-- 	public long countAllAccount(@Param("groupId") String groupId); -->
-	<select id="listAllAccount" resultType="long">
+	<select id="countAllAccount" resultType="long">
 		select count(distinct acc.id)
 		  from t_account acc
 		  left outer join rel_account_role rel

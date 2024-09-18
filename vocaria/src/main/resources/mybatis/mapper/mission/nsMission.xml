@@ -65,4 +65,35 @@
 		       and choice.answer = 1
 		  </foreach> st
 	</select>
+	
+	<!-- public int insertMission(@Param("mission") MissionVO missionVO,
+			@Param("tester") AccountVO tester); -->
+	<insert id="insertMission">
+		<selectKey keyProperty="mission.id" resultType="String"
+			order="BEFORE">
+			select NEXT_PK('s_mission')
+		</selectKey>
+		insert into t_mission(id, tester, maker, time, viewed, complete)
+		values (
+			#{mission.id},
+			#{tester.id},
+			#{mission.maker.id},
+			curdate(),
+			${mission.isViewed},
+			${mission.isComplete}
+		);
+	</insert>
+	
+	<!-- public int composeMission(@Param("missionId") String missionId,
+			@Param("questionIdList") List<String> questionIdList); -->
+	<insert id="composeMission">
+		insert into rel_mission_question(mission, question)
+		select sub.*
+           from
+		<foreach open="(" collection="questionIdList" item="id" separator=" union all " close=")">
+         	select
+         		#{missionId} as mission,
+         		#{id} as question
+         </foreach> sub;
+	</insert>
 </mapper>

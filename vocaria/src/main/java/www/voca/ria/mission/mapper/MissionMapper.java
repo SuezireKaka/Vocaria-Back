@@ -21,6 +21,13 @@ public interface MissionMapper extends GeneralMapper {
 	
 	public int evaluate(@Param("questionIdList") List<String> questionIdList,
 			@Param("chooseList") List<String> chooseList);
+	
+	
+	public int insertMission(@Param("mission") MissionVO missionVO,
+			@Param("tester") AccountVO tester);
+	
+	public int composeMission(@Param("missionId") String missionId,
+			@Param("questionIdList") List<String> questionIdList);
 
 	
 	public int setupTodayMission(@Param("student") AccountVO student);

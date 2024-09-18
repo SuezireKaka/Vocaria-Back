@@ -34,7 +34,18 @@ public class MissionService {
 		List<String> questionIdList = choice.getQuestionIdList();
 		List<String> chooseList = choice.getChooseList();
 		
-		return missionMapper.evaluate(questionIdList, chooseList);
+		int correctNum = missionMapper.evaluate(questionIdList, chooseList);
+		
+		MissionVO mission = MissionVO.builder()
+				.maker(student)
+				.isViewed(true)
+				.isComplete(correctNum == questionIdList.size())
+				.build();
+		
+		missionMapper.insertMission(mission, student);
+		missionMapper.composeMission(mission.getId(), questionIdList);
+		
+		return correctNum;
 	}
 	
 	public int setupTodayMission(AccountVO student) {
