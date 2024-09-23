@@ -1,15 +1,19 @@
 package www.voca.ria.mission.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import www.voca.ria.framework.exception.BusinessException;
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.mission.mapper.MissionMapper;
 import www.voca.ria.mission.model.ChoiceDTO;
 import www.voca.ria.mission.model.MissionVO;
+import www.voca.ria.mission.strategy.AutomaticallyIteratingStrategy.QuestionIteratingTag;
+import www.voca.ria.mission.strategy.DirectlyChoosingStrategy.QuestionAddress;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy.StrategyType;
 import www.voca.ria.party.model.AccountVO;
@@ -48,23 +52,29 @@ public class MissionService {
 		return correctNum;
 	}
 	
-	public int setupTodayMission(AccountVO student) {
-		return missionMapper.setupTodayMission(student);
-	}
-	
-	public boolean buildMission(QuestionBuildStrategy strategy, List<String> parsedData) {
+	public boolean buildMission(List<AccountVO> studentsList,
+			QuestionBuildStrategy strategy, List<String> parsedData)
+					throws BusinessException {
 		return strategy.getType() == StrategyType.AUTO
-				? buildMissionAutomatically(parsedData)
-				: buildMissionDirectly(parsedData);
+				? buildMissionAutomatically(studentsList, parsedData)
+				: buildMissionDirectly(studentsList, parsedData);
 	}
 
-	private boolean buildMissionAutomatically(List<String> parsedData) {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean buildMissionAutomatically(List<AccountVO> studentsList,
+			List<String> parsedData) {
+		List<QuestionIteratingTag> tagList = parsedData.stream()
+				.map(QuestionIteratingTag::fromString)
+				.collect(Collectors.toList());
+		
+		return missionMapper.buildMissionAutomatically(studentsList, tagList);
 	}
 
-	private boolean buildMissionDirectly(List<String> parsedData) {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean buildMissionDirectly(List<AccountVO> studentsList,
+			List<String> parsedData) {
+		List<QuestionAddress> addressList = parsedData.stream()
+				.map(QuestionAddress::fromString)
+				.collect(Collectors.toList());
+		
+		return missionMapper.buildMissionDirectly(studentsList, addressList);
 	}
 }

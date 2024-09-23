@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Param;
 import www.voca.ria.framework.mapper.GeneralMapper;
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.mission.model.MissionVO;
+import www.voca.ria.mission.strategy.AutomaticallyIteratingStrategy.QuestionIteratingTag;
+import www.voca.ria.mission.strategy.DirectlyChoosingStrategy.QuestionAddress;
 import www.voca.ria.party.model.AccountVO;
 
 @Mapper
@@ -30,5 +32,11 @@ public interface MissionMapper extends GeneralMapper {
 			@Param("questionIdList") List<String> questionIdList);
 
 	
-	public int setupTodayMission(@Param("student") AccountVO student);
+	public boolean buildMissionAutomatically(
+			@Param("studantList") List<AccountVO> studentsList,
+			@Param("tagList") List<QuestionIteratingTag> tagList);
+	
+	public boolean buildMissionDirectly(
+			@Param("studantList") List<AccountVO> studentsList,
+			@Param("addressList") List<QuestionAddress> addressList);
 }

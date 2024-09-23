@@ -7,9 +7,7 @@
 	<resultMap id="rmMissionVO" extends="nsEntity.rmEntity"
 			type="www.voca.ria.mission.model.MissionVO">
 		<result property="isViewed" column="viewed" />
-		<association property="tester" columnPrefix="tstr_"
-				resultMap="www.voca.ria.party.mapper.PartyMapper.rmAccountVO" />
-		<association property="tester" columnPrefix="mkr_"
+		<association property="maker" columnPrefix="mkr_"
 				resultMap="www.voca.ria.party.mapper.PartyMapper.rmAccountVO" />
 		<collection property="questionList" columnPrefix="qst_"
 				resultMap="www.voca.ria.vocabulary.mapper.VocaMapper.rmQuestionVO">
@@ -24,7 +22,6 @@
 					quest.question quest_question
 		  from (
 			select mission.*,
-					tester.id tstr_id, tester.nick tstr_nick,
 					maker.id mkr_id, maker.nick mkr_nick
 			  from t_mission mission
 			  left outer join t_account tester

@@ -50,11 +50,13 @@ public class MissionController {
 			+ " and "
 			+ "principal.getId() == #accountId"
 			+ ") or "
-			+ "@actScopeSpel.isAbleToRunAny(authentication, '0000', 'TM')")
+			+ "@groupScopeSpel.isTeachableChain(authentication, #accountId)")
 	public ResponseEntity<Pair<List<MissionVO>, PageDTO>> listAllMission(@AuthenticationPrincipal AccountVO student,
 			@PathVariable String accountId, @PathVariable String dateString,
 			@PathVariable int pageNum) {
 		Pair<List<MissionVO>, PageDTO> result = missionService.listAllMission(accountId, dateString, pageNum);
+		spel.clearImsi();
+		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
@@ -86,6 +88,8 @@ public class MissionController {
 			@RequestBody QuestionBuildStrategy strategy) throws BusinessException {
 		List<String> parsedData;
 		
+		List<AccountVO> studentsList = spel.getImsiResult();
+		
 		try {
 			parsedData = strategy.getParsedData();
 		}
@@ -93,7 +97,7 @@ public class MissionController {
 			throw new BusinessException("Invalid strategy found", ErrorCode.INVALID_STRATEGY);
 		}
 		
-		boolean result = missionService.buildMission(strategy, parsedData);
+		boolean result = missionService.buildMission(studentsList, strategy, parsedData);
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
