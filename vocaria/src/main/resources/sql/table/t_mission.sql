@@ -7,3 +7,4 @@ create table t_mission(
 	complete		tinyint
 );
 create index idx_account_time on t_mission(tester, time);
+create index idx_maker on t_mission(maker);

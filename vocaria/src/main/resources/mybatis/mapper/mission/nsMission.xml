@@ -14,9 +14,46 @@
 		</collection>
 	</resultMap>
 	
-	<!-- public List<MissionVO> listAllMission(@Param("accountId") String accountId,
+	<!-- public List<MissionVO> listAllMissionFrom(
+			@Param("teacherId") String teacherId,
+			@Param("studentId") String studentId,
 			@Param("date") String dateString, @Param("page") PageDTO page); -->
-	<select id="listAllMission" resultMap="rmMissionVO">
+	<select id="listAllMissionFrom" resultMap="rmMissionVO">
+		select lm.*,
+				quest.id quest_id,
+					quest.question quest_question
+		  from (
+			select mission.*,
+					maker.id mkr_id, maker.nick mkr_nick
+			  from t_mission mission
+			  left outer join t_account tester
+			    on tester.id = mission.tester
+			  left outer join t_account maker
+			    on maker.id = mission.maker
+			 where mission.time = #{date}
+			   and tester.id = #{studentId}
+			   and maker = #{teacherId}
+			 limit ${page.onePageNum}
+			offset ${page.offset}
+			) lm
+		  left outer join rel_mission_question rel
+		    on rel.mission = lm.id
+		  left outer join t_question quest
+    	    on quest.id = rel.question
+	</select>
+	<!-- public long countAllMissionFrom(@Param("teacherId") String teacherId,
+			@Param("studentId") String studentId, @Param("date") String dateString); -->
+	<select id="countAllMissionFrom" resultType="long">
+		select count(*)
+		  from t_mission
+		 where time = #{date}
+		   and tester = #{studentId}
+		   and maker = #{teacherId}
+	</select>
+	
+	<!-- public List<MissionVO> listAllMissionTo(@Param("accountId") String accountId,
+			@Param("date") String dateString, @Param("page") PageDTO page); -->
+	<select id="listAllMissionTo" resultMap="rmMissionVO">
 		select lm.*,
 				quest.id quest_id,
 					quest.question quest_question
@@ -38,9 +75,9 @@
 		  left outer join t_question quest
     	    on quest.id = rel.question
 	</select>
-	<!-- public long countAllMission(@Param("accountId") String accountId,
+	<!-- public long countAllMissionTo(@Param("accountId") String accountId,
 			@Param("date") String dateString); -->
-	<select id="countAllMission" resultType="long">
+	<select id="countAllMissionTo" resultType="long">
 		select count(*)
 		  from t_mission
 		 where time = #{date}

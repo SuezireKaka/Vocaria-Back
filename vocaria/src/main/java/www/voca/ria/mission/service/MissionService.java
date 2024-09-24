@@ -23,13 +23,28 @@ public class MissionService {
 	@Autowired
 	private MissionMapper missionMapper;
 	
-	public Pair<List<MissionVO>, PageDTO> listAllMission(
-			String accountId, String dateString, int pageNum) {
+	public Pair<List<MissionVO>, PageDTO> listAllMissionFrom(
+			String teacherId, String studentId, String dateString, int pageNum) {
 		PageDTO page = new PageDTO(pageNum);
 		
-		List<MissionVO> missionList = missionMapper.listAllMission(accountId, dateString, page);
+		List<MissionVO> missionList = missionMapper
+				.listAllMissionFrom(teacherId, studentId, dateString, page);
 		
-		page.buildPagination(missionMapper.countAllMission(accountId, dateString));
+		page.buildPagination(missionMapper
+				.countAllMissionFrom(teacherId, studentId, dateString));
+		
+		return new Pair<>(missionList, page);
+	}
+	
+	public Pair<List<MissionVO>, PageDTO> listAllMissionTo(
+			String studentId, String dateString, int pageNum) {
+		PageDTO page = new PageDTO(pageNum);
+		
+		List<MissionVO> missionList = missionMapper
+				.listAllMissionTo(studentId, dateString, page);
+		
+		page.buildPagination(missionMapper
+				.countAllMissionTo(studentId, dateString));
 		
 		return new Pair<>(missionList, page);
 	}

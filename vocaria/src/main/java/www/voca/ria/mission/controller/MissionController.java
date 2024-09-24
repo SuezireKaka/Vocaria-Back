@@ -40,21 +40,34 @@ public class MissionController {
 	@PreAuthorize("@groupScopeSpel.isTeachableChain(authentication, #accountIdChain)")
 	public ResponseEntity<Boolean> buildMission(@PathVariable String accountIdChain) {
 		spel.getImsiResult();
-		
+		 
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 	
-	// /mission/getMission/somewhatAccountId/2024-08-14/1
-	@GetMapping("/getMission/{accountId}/{dateString}/{pageNum}")
-	@PreAuthorize("(@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')"
-			+ " and "
-			+ "principal.getId() == #accountId"
-			+ ") or "
-			+ "@groupScopeSpel.isTeachableChain(authentication, #accountId)")
-	public ResponseEntity<Pair<List<MissionVO>, PageDTO>> listAllMission(@AuthenticationPrincipal AccountVO student,
-			@PathVariable String accountId, @PathVariable String dateString,
+	// /mission/listAllMissionFromMe/somewhatAccountId/2024-08-14/1
+	@GetMapping("/listAllMissionFromMe/{studentId}/{dateString}/{pageNum}")
+	@PreAuthorize("@groupScopeSpel.isTeachableChain(authentication, #studentId)")
+	public ResponseEntity<Pair<List<MissionVO>, PageDTO>> listAllMissionFromMe(
+			@AuthenticationPrincipal AccountVO teacher,
+			@PathVariable String studentId, @PathVariable String dateString,
 			@PathVariable int pageNum) {
-		Pair<List<MissionVO>, PageDTO> result = missionService.listAllMission(accountId, dateString, pageNum);
+		Pair<List<MissionVO>, PageDTO> result =
+				missionService.listAllMissionFrom(
+						teacher.getId(), studentId, dateString, pageNum);
+		spel.clearImsi();
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// /mission/listAllMissionToMe/2024-08-14/1
+	@GetMapping("/listAllMissionToMe/{dateString}/{pageNum}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
+	public ResponseEntity<Pair<List<MissionVO>, PageDTO>> listAllMissionToMe(
+			@AuthenticationPrincipal AccountVO student,
+			@PathVariable String dateString,
+			@PathVariable int pageNum) {
+		Pair<List<MissionVO>, PageDTO> result = missionService
+				.listAllMissionTo(student.getId(), dateString, pageNum);
 		spel.clearImsi();
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);

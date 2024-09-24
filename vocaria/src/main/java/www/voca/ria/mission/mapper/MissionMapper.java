@@ -14,10 +14,16 @@ import www.voca.ria.party.model.AccountVO;
 
 @Mapper
 public interface MissionMapper extends GeneralMapper {
-	
-	public List<MissionVO> listAllMission(@Param("accountId") String accountId,
+	public List<MissionVO> listAllMissionFrom(
+			@Param("teacherId") String teacherId,
+			@Param("studentId") String studentId,
 			@Param("date") String dateString, @Param("page") PageDTO page);
-	public long countAllMission(@Param("accountId") String accountId,
+	public long countAllMissionFrom(@Param("teacherId") String teacherId,
+			@Param("studentId") String studentId, @Param("date") String dateString);
+	
+	public List<MissionVO> listAllMissionTo(@Param("accountId") String accountId,
+			@Param("date") String dateString, @Param("page") PageDTO page);
+	public long countAllMissionTo(@Param("accountId") String accountId,
 			@Param("date") String dateString);
 
 	
