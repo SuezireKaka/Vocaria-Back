@@ -4,14 +4,22 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="www.voca.ria.mission.mapper.MissionMapper">
-	<resultMap id="rmMissionVO" extends="nsEntity.rmEntity"
+	<resultMap id="rmMissionVO" extends="nsEntity.rmTimeEntity"
 			type="www.voca.ria.mission.model.MissionVO">
 		<result property="isViewed" column="viewed" />
+		<result property="isComplete" column="complete" />
 		<association property="maker" columnPrefix="mkr_"
 				resultMap="www.voca.ria.party.mapper.PartyMapper.rmAccountVO" />
-		<collection property="questionList" columnPrefix="qst_"
-				resultMap="www.voca.ria.vocabulary.mapper.VocaMapper.rmQuestionVO">
+		<collection property="scorePieceList" columnPrefix="sp_"
+				resultMap="rmScorePieceVO">
 		</collection>
+	</resultMap>
+	
+	<resultMap id="rmScorePieceVO"
+			type="www.voca.ria.mission.model.ScorePieceVO">
+		<result property="isAnswer" column="answer" />
+		<association property="question" columnPrefix="qst_"
+				resultMap="www.voca.ria.vocabulary.mapper.VocaMapper.rmQuestionVO" />
 	</resultMap>
 	
 	<!-- public List<MissionVO> listAllMissionFrom(
@@ -20,33 +28,38 @@
 			@Param("date") String dateString, @Param("page") PageDTO page); -->
 	<select id="listAllMissionFrom" resultMap="rmMissionVO">
 		select lm.*,
-				quest.id quest_id,
-					quest.question quest_question
+				sp.answer sp_answer,
+				quest.id sp_quest_id,
+					quest.question sp_quest_question
 		  from (
 			select mission.*,
+					count(case when rel.answer = 1 then 1 end) = count(rel.answer) complete,
 					maker.id mkr_id, maker.nick mkr_nick
 			  from t_mission mission
 			  left outer join t_account tester
 			    on tester.id = mission.tester
 			  left outer join t_account maker
 			    on maker.id = mission.maker
-			 where mission.time = #{date}
+			  left outer join rel_mission_question rel
+		    	on rel.mission = mission.id
+			 where mission.reg_dt like #{date}
 			   and tester.id = #{studentId}
 			   and maker = #{teacherId}
+			 group by rel.mission
 			 limit ${page.onePageNum}
 			offset ${page.offset}
 			) lm
-		  left outer join rel_mission_question rel
-		    on rel.mission = lm.id
+		  left outer join rel_mission_question sp
+		    on sp.mission = lm.id
 		  left outer join t_question quest
-    	    on quest.id = rel.question
+    	    on quest.id = sp.question
 	</select>
 	<!-- public long countAllMissionFrom(@Param("teacherId") String teacherId,
 			@Param("studentId") String studentId, @Param("date") String dateString); -->
 	<select id="countAllMissionFrom" resultType="long">
 		select count(*)
 		  from t_mission
-		 where time = #{date}
+		 where reg_dt like #{date}
 		   and tester = #{studentId}
 		   and maker = #{teacherId}
 	</select>
@@ -55,49 +68,46 @@
 			@Param("date") String dateString, @Param("page") PageDTO page); -->
 	<select id="listAllMissionTo" resultMap="rmMissionVO">
 		select lm.*,
-				quest.id quest_id,
-					quest.question quest_question
+				sp.answer sp_answer,
+				quest.id sp_quest_id,
+					quest.question sp_quest_question
 		  from (
 			select mission.*,
+					count(case when rel.answer = 1 then 1 end) = count(rel.answer) complete,
 					maker.id mkr_id, maker.nick mkr_nick
 			  from t_mission mission
 			  left outer join t_account tester
 			    on tester.id = mission.tester
 			  left outer join t_account maker
 			    on maker.id = mission.maker
-			 where mission.time = #{date}
+			  left outer join rel_mission_question rel
+		    	on rel.mission = mission.id
+			 where mission.reg_dt like #{date}
 			   and tester.id = #{accountId}
+			 group by rel.mission
 			 limit ${page.onePageNum}
 			offset ${page.offset}
 			) lm
-		  left outer join rel_mission_question rel
-		    on rel.mission = lm.id
+		  left outer join rel_mission_question sp
+		    on sp.mission = lm.id
 		  left outer join t_question quest
-    	    on quest.id = rel.question
+    	    on quest.id = sp.question
 	</select>
 	<!-- public long countAllMissionTo(@Param("accountId") String accountId,
 			@Param("date") String dateString); -->
 	<select id="countAllMissionTo" resultType="long">
 		select count(*)
 		  from t_mission
-		 where time = #{date}
+		 where reg_dt like #{date}
 		   and tester = #{accountId}
 	</select>
 	
-	<!-- public int evaluate(@Param("questionIdList") List<String> questionIdList,
-			@Param("chooseList") List<String> chooseList); -->
-	<select id="evaluate" resultType="int">
-		select sum(if(st.ans > 0, 1, 0)) score
-		  from <foreach collection="questionIdList" item="questId" index="idx"
-		  	open="(" separator="union all" close=")"
-		  >
-		    select choice.choice = #{chooseList[${idx}]} ans
-		      from t_question quest
-		      left outer join t_choice choice
-		        on choice.question = quest.id
-		     where quest.id = #{questId}
-		       and choice.answer = 1
-		  </foreach> st
+	<!-- public int countAnswerChoice(@Param("missionId") String missionId); -->
+	<select id="countAnswerChoice" resultType="int">
+		select count(*)
+		  from rel_mission_question
+		 where mission = #{missionId}
+		   and answer = 1
 	</select>
 	
 	<!-- public int insertMission(@Param("mission") MissionVO missionVO,
@@ -107,27 +117,33 @@
 			order="BEFORE">
 			select NEXT_PK('s_mission')
 		</selectKey>
-		insert into t_mission(id, tester, maker, time, viewed, complete)
+		insert into t_mission(id, tester, maker, viewed)
 		values (
 			#{mission.id},
 			#{tester.id},
 			#{mission.maker.id},
-			curdate(),
-			${mission.isViewed},
-			${mission.isComplete}
+			${mission.isViewed}
 		);
 	</insert>
 	
-	<!-- public int composeMission(@Param("missionId") String missionId,
-			@Param("questionIdList") List<String> questionIdList); -->
-	<insert id="composeMission">
-		insert into rel_mission_question(mission, question)
+	<!-- public int evaluate(@Param("missionId") String missionId,
+			@Param("questionIdList") List<String> questionIdList,
+			@Param("chooseList") List<String> chooseList); -->
+	<insert id="evaluate">
+		insert into rel_mission_question(mission, question, answer)
 		select sub.*
-           from
-		<foreach open="(" collection="questionIdList" item="id" separator=" union all " close=")">
-         	select
-         		#{missionId} as mission,
-         		#{id} as question
-         </foreach> sub;
+		  from
+		<foreach collection="questionIdList" item="questId" index="idx"
+		  	open="(" separator="union all" close=")"
+		>
+		    select #{missionId} as mission,
+		    		#{questId} as question,
+		    		choice.choice = #{chooseList[${idx}]} as answer
+		      from t_question quest
+		      left outer join t_choice choice
+		        on choice.question = quest.id
+		     where quest.id = #{questId}
+		       and choice.answer = 1
+		</foreach> sub;
 	</insert>
 </mapper>

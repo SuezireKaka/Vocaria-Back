@@ -25,17 +25,16 @@ public interface MissionMapper extends GeneralMapper {
 			@Param("date") String dateString, @Param("page") PageDTO page);
 	public long countAllMissionTo(@Param("accountId") String accountId,
 			@Param("date") String dateString);
-
 	
-	public int evaluate(@Param("questionIdList") List<String> questionIdList,
-			@Param("chooseList") List<String> chooseList);
+	public int countAnswerChoice(@Param("missionId") String missionId);
 	
 	
 	public int insertMission(@Param("mission") MissionVO missionVO,
 			@Param("tester") AccountVO tester);
 	
-	public int composeMission(@Param("missionId") String missionId,
-			@Param("questionIdList") List<String> questionIdList);
+	public int evaluate(@Param("missionId") String missionId,
+			@Param("questionIdList") List<String> questionIdList,
+			@Param("chooseList") List<String> chooseList);
 
 	
 	public boolean buildMissionAutomatically(

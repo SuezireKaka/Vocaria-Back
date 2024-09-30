@@ -53,7 +53,7 @@ public class MissionController {
 			@PathVariable int pageNum) {
 		Pair<List<MissionVO>, PageDTO> result =
 				missionService.listAllMissionFrom(
-						teacher.getId(), studentId, dateString, pageNum);
+						teacher.getId(), studentId, dateString + "%", pageNum);
 		spel.clearImsi();
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -67,7 +67,7 @@ public class MissionController {
 			@PathVariable String dateString,
 			@PathVariable int pageNum) {
 		Pair<List<MissionVO>, PageDTO> result = missionService
-				.listAllMissionTo(student.getId(), dateString, pageNum);
+				.listAllMissionTo(student.getId(), dateString + "%", pageNum);
 		spel.clearImsi();
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);

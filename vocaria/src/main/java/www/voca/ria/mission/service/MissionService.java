@@ -39,8 +39,7 @@ public class MissionService {
 	public Pair<List<MissionVO>, PageDTO> listAllMissionTo(
 			String studentId, String dateString, int pageNum) {
 		PageDTO page = new PageDTO(pageNum);
-		
-		List<MissionVO> missionList = missionMapper
+			List<MissionVO> missionList = missionMapper
 				.listAllMissionTo(studentId, dateString, page);
 		
 		page.buildPagination(missionMapper
@@ -53,16 +52,19 @@ public class MissionService {
 		List<String> questionIdList = choice.getQuestionIdList();
 		List<String> chooseList = choice.getChooseList();
 		
-		int correctNum = missionMapper.evaluate(questionIdList, chooseList);
-		
 		MissionVO mission = MissionVO.builder()
 				.maker(student)
 				.isViewed(true)
-				.isComplete(correctNum == questionIdList.size())
+				.isComplete(false)
 				.build();
 		
-		missionMapper.insertMission(mission, student);
-		missionMapper.composeMission(mission.getId(), questionIdList);
+		if (mission.getId() == null) {
+			missionMapper.insertMission(mission, student);
+		}
+
+		missionMapper.evaluate(mission.getId(), questionIdList, chooseList);
+		
+		int correctNum = missionMapper.countAnswerChoice(mission.getId());
 		
 		return correctNum;
 	}
