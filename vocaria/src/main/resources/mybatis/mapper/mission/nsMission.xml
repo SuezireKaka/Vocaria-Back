@@ -19,7 +19,17 @@
 			type="www.voca.ria.mission.model.ScorePieceVO">
 		<result property="isAnswer" column="answer" />
 		<association property="question" columnPrefix="qst_"
-				resultMap="www.voca.ria.vocabulary.mapper.VocaMapper.rmQuestionVO" />
+				resultMap="rmQuestionVO" />
+	</resultMap>
+	
+	<resultMap id="rmQuestionVO" extends="nsEntity.rmEntity"
+		type="www.voca.ria.mission.model.QuestionVO">
+		<result property="question" column="question" />
+		<association property="subject" columnPrefix="subj_"
+				resultMap="rmSubjectVO" />
+		<collection property="choiceList" ofType="String">
+			<result column="choice" javaType="String"/>
+		</collection>
 	</resultMap>
 	
 	<!-- public List<MissionVO> listAllMissionFrom(
@@ -36,15 +46,13 @@
 					count(case when rel.answer = 1 then 1 end) = count(rel.answer) complete,
 					maker.id mkr_id, maker.nick mkr_nick
 			  from t_mission mission
-			  left outer join t_account tester
-			    on tester.id = mission.tester
 			  left outer join t_account maker
 			    on maker.id = mission.maker
 			  left outer join rel_mission_question rel
 		    	on rel.mission = mission.id
 			 where mission.reg_dt like #{date}
-			   and tester.id = #{studentId}
-			   and maker = #{teacherId}
+			   and mission.tester = #{studentId}
+			   and mission.maker = #{teacherId}
 			 group by rel.mission
 			 limit ${page.onePageNum}
 			offset ${page.offset}
@@ -76,14 +84,12 @@
 					count(case when rel.answer = 1 then 1 end) = count(rel.answer) complete,
 					maker.id mkr_id, maker.nick mkr_nick
 			  from t_mission mission
-			  left outer join t_account tester
-			    on tester.id = mission.tester
 			  left outer join t_account maker
 			    on maker.id = mission.maker
 			  left outer join rel_mission_question rel
 		    	on rel.mission = mission.id
 			 where mission.reg_dt like #{date}
-			   and tester.id = #{accountId}
+			   and mission.tester = #{accountId}
 			 group by rel.mission
 			 limit ${page.onePageNum}
 			offset ${page.offset}

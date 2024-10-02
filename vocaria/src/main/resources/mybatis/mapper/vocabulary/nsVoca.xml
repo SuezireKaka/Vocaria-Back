@@ -19,17 +19,7 @@
 		<result property="name" column="name" />
 		<result property="questionNumber" column="qnum" />
 		<collection property="questionList" columnPrefix="qst_"
-				resultMap="rmQuestionVO">
-		</collection>
-	</resultMap>
-	
-	<resultMap id="rmQuestionVO" extends="nsEntity.rmEntity"
-		type="www.voca.ria.vocabulary.model.QuestionVO">
-		<result property="question" column="question" />
-		<association property="subject" columnPrefix="subj_"
-				resultMap="rmSubjectVO" />
-		<collection property="choiceList" ofType="String">
-			<result column="choice" javaType="String"/>
+				resultMap="www.voca.ria.mission.mapper.MissionMapper.rmQuestionVO">
 		</collection>
 	</resultMap>
 	

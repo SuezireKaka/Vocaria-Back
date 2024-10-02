@@ -75,7 +75,7 @@ public class MissionController {
 	
 	// /mission/anonymous/listAllStrategyType
 	@GetMapping("/anonymous/listAllStrategyType")
-	public ResponseEntity<List<StrategyType>> listAllVoca() {
+	public ResponseEntity<List<StrategyType>> listAllStrategyType() {
 		List<StrategyType> result = Arrays.asList(StrategyType.values());
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

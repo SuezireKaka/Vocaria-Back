@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import www.voca.ria.framework.model.entity.Entity;
+import www.voca.ria.mission.model.QuestionVO;
 
 @Getter
 @NoArgsConstructor

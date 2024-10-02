@@ -1,10 +1,11 @@
-package www.voca.ria.vocabulary.model;
+package www.voca.ria.mission.model;
 
 import java.util.List;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import www.voca.ria.framework.model.entity.Entity;
+import www.voca.ria.vocabulary.model.SubjectVO;
 
 @Getter
 @NoArgsConstructor
