@@ -17,6 +17,7 @@
 	
 	<resultMap id="rmScorePieceVO"
 			type="www.voca.ria.mission.model.ScorePieceVO">
+		<id property="id" column="qst_id"/>
 		<result property="isAnswer" column="answer" />
 		<association property="question" columnPrefix="qst_"
 				resultMap="rmQuestionVO" />
@@ -26,7 +27,7 @@
 		type="www.voca.ria.mission.model.QuestionVO">
 		<result property="question" column="question" />
 		<association property="subject" columnPrefix="subj_"
-				resultMap="rmSubjectVO" />
+				resultMap="www.voca.ria.vocabulary.mapper.VocaMapper.rmSubjectVO" />
 		<collection property="choiceList" ofType="String">
 			<result column="choice" javaType="String"/>
 		</collection>
@@ -37,10 +38,7 @@
 			@Param("studentId") String studentId,
 			@Param("date") String dateString, @Param("page") PageDTO page); -->
 	<select id="listAllMissionFrom" resultMap="rmMissionVO">
-		select lm.*,
-				sp.answer sp_answer,
-				quest.id sp_quest_id,
-					quest.question sp_quest_question
+		select lm.*
 		  from (
 			select mission.*,
 					count(case when rel.answer = 1 then 1 end) = count(rel.answer) complete,
@@ -75,10 +73,7 @@
 	<!-- public List<MissionVO> listAllMissionTo(@Param("accountId") String accountId,
 			@Param("date") String dateString, @Param("page") PageDTO page); -->
 	<select id="listAllMissionTo" resultMap="rmMissionVO">
-		select lm.*,
-				sp.answer sp_answer,
-				quest.id sp_quest_id,
-					quest.question sp_quest_question
+		select lm.*
 		  from (
 			select mission.*,
 					count(case when rel.answer = 1 then 1 end) = count(rel.answer) complete,
@@ -114,6 +109,26 @@
 		  from rel_mission_question
 		 where mission = #{missionId}
 		   and answer = 1
+	</select>
+	
+	<!-- public MissionVO getMissionById(String missionId); -->
+	<select id="getMissionById" resultMap="rmMissionVO">
+		select mission.*,
+				count(case when rel.answer = 1 then 1 end) over (partition by rel.mission)
+					= count(rel.answer) over (partition by rel.mission) complete,
+				maker.id mkr_id, maker.nick mkr_nick,
+				rel.answer sp_answer,
+				quest.id sp_qst_id, quest.question sp_qst_question,
+				'' sp_qst_choice
+		  from t_mission mission
+		  left outer join t_account maker
+		    on maker.id = mission.maker
+		  left outer join rel_mission_question rel
+		    on rel.mission = mission.id
+		  left outer join t_question quest
+		    on quest.id = rel.question
+		 where mission.id = #{missionId}
+		 order by quest.id
 	</select>
 	
 	<!-- public int insertMission(@Param("mission") MissionVO missionVO,

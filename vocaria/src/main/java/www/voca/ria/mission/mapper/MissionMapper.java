@@ -29,6 +29,9 @@ public interface MissionMapper extends GeneralMapper {
 	public int countAnswerChoice(@Param("missionId") String missionId);
 	
 	
+	public MissionVO getMissionById(String missionId);
+	
+	
 	public int insertMission(@Param("mission") MissionVO missionVO,
 			@Param("tester") AccountVO tester);
 	

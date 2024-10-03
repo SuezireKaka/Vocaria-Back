@@ -73,6 +73,20 @@ public class MissionController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	// /mission/getMissionOfStudentById/somewhatStudentId/0000
+	@GetMapping("/getMissionOfStudentById/{studentId}/{questionId}")
+	@PreAuthorize("principal.getId().equals(#studentId)"
+			+ "|| @groupScopeSpel.isTeachableChain(authentication, #studentId)")
+	public ResponseEntity<MissionVO> getMissionOfStudentById(
+			@AuthenticationPrincipal AccountVO account,
+			@PathVariable String studentId,
+			@PathVariable String questionId) {
+		MissionVO result = missionService.getMissionOfStudentById(questionId);
+		spel.clearImsi();
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	// /mission/anonymous/listAllStrategyType
 	@GetMapping("/anonymous/listAllStrategyType")
 	public ResponseEntity<List<StrategyType>> listAllStrategyType() {

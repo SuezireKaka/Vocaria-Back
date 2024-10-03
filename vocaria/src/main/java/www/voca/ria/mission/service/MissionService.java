@@ -48,6 +48,11 @@ public class MissionService {
 		return new Pair<>(missionList, page);
 	}
 	
+	public MissionVO getMissionOfStudentById(String missionId) {
+		MissionVO mission = missionMapper.getMissionById(missionId);
+		return mission;
+	}
+	
 	public int evaluate(AccountVO student, ChoiceDTO choice) {
 		List<String> questionIdList = choice.getQuestionIdList();
 		List<String> chooseList = choice.getChooseList();

@@ -1,5 +1,6 @@
 package www.voca.ria.mission.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -12,7 +13,7 @@ import www.voca.ria.vocabulary.model.SubjectVO;
 public class QuestionVO extends Entity {
 	private SubjectVO subject;
 	private String question;
-	private List<String> choiceList;
+	private List<String> choiceList = new ArrayList<>();
 	
 	private int selectedChoice = 0;
 }
