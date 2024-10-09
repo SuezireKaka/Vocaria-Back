@@ -20,6 +20,7 @@ import www.voca.ria.framework.exception.ErrorCode;
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.mission.model.ChoiceDTO;
+import www.voca.ria.mission.model.ExamDTO;
 import www.voca.ria.mission.model.MissionVO;
 import www.voca.ria.mission.service.MissionService;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
@@ -73,6 +74,25 @@ public class MissionController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	// /mission/listAllQuestionIn/0002
+	@GetMapping("/listAllQuestionIn/{missionId}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
+	public ResponseEntity<ExamDTO> listAllQuestionIn(
+			@AuthenticationPrincipal AccountVO student,
+			@PathVariable String missionId) {
+		ExamDTO result = missionService.listAllQuestionIn(missionId);
+		spel.clearImsi();
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// /mission/anonymous/listAllStrategyType
+	@GetMapping("/anonymous/listAllStrategyType")
+	public ResponseEntity<List<StrategyType>> listAllStrategyType() {
+		List<StrategyType> result = Arrays.asList(StrategyType.values());
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	// /mission/getMissionOfStudentById/somewhatStudentId/0000
 	@GetMapping("/getMissionOfStudentById/{studentId}/{questionId}")
 	@PreAuthorize("principal.getId().equals(#studentId)"
@@ -84,13 +104,6 @@ public class MissionController {
 		MissionVO result = missionService.getMissionOfStudentById(questionId);
 		spel.clearImsi();
 		
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-	
-	// /mission/anonymous/listAllStrategyType
-	@GetMapping("/anonymous/listAllStrategyType")
-	public ResponseEntity<List<StrategyType>> listAllStrategyType() {
-		List<StrategyType> result = Arrays.asList(StrategyType.values());
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	

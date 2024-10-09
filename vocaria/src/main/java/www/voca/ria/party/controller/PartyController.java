@@ -136,17 +136,6 @@ public class PartyController {
 		}
 		return ResponseEntity.ok(partyService.toggleJoin(user, groupId));
 	}
-
-	/*
-	// /party/updateMember
-	@PostMapping("/updateMember")
-	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> updateMember(@AuthenticationPrincipal AccountVO owner,
-			@RequestBody SignUpDto signUpRequest) {
-		return ResponseEntity.ok(partyService.mngMember(signUpRequest));
-	}
-	
-	*/
 	
 	// /party/syncRole/0000
 	@PostMapping("/syncRole/{groupId}")
@@ -160,15 +149,5 @@ public class PartyController {
 		
 		return ResponseEntity.ok(partyService.syncRole(groupId, grantList));
 	}
-	
-	/*
-	// /party/deleteMember/닉
-	@GetMapping("/deleteMember/{id}")
-	@PreAuthorize("hasAnyAuthority('reader', 'writer','manager', 'admin')")
-	public ResponseEntity<Integer> deleteMember(@AuthenticationPrincipal AccountVO owner, @PathVariable String id) {
-		return ResponseEntity.ok(partyService.deleteMember(id));
-	}
-	
-	*/
 
 }

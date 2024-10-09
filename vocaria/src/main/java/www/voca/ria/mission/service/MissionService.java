@@ -11,7 +11,9 @@ import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.framework.model.structure.Pair;
 import www.voca.ria.mission.mapper.MissionMapper;
 import www.voca.ria.mission.model.ChoiceDTO;
+import www.voca.ria.mission.model.ExamDTO;
 import www.voca.ria.mission.model.MissionVO;
+import www.voca.ria.mission.model.QuestionVO;
 import www.voca.ria.mission.strategy.AutomaticallyIteratingStrategy.QuestionIteratingTag;
 import www.voca.ria.mission.strategy.DirectlyChoosingStrategy.QuestionAddress;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
@@ -48,6 +50,12 @@ public class MissionService {
 		return new Pair<>(missionList, page);
 	}
 	
+	public ExamDTO listAllQuestionIn(String missionId) {
+		List<QuestionVO> questionList = missionMapper.listAllQuestionIn(missionId);
+		ExamDTO result = new ExamDTO(questionList);
+		return result;
+	}
+	
 	public MissionVO getMissionOfStudentById(String missionId) {
 		MissionVO mission = missionMapper.getMissionById(missionId);
 		return mission;
@@ -58,6 +66,7 @@ public class MissionService {
 		List<String> chooseList = choice.getChooseList();
 		
 		MissionVO mission = MissionVO.builder()
+				.id(choice.getMissionId())
 				.maker(student)
 				.isViewed(true)
 				.isComplete(false)

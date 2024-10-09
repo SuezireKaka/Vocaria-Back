@@ -103,12 +103,24 @@
 		   and tester = #{accountId}
 	</select>
 	
-	<!-- public int countAnswerChoice(@Param("missionId") String missionId); -->
+	<!-- public List<QuestionVO> listAllQuestionIn(String missionId); -->
+	<select id="listAllQuestionIn" resultMap="rmQuestionVO">
+		select quest.*,
+				choice.choice choice
+		  from t_question quest
+		  left outer join rel_mission_question rel
+		    on rel.question = quest.id
+		  left outer join t_choice choice
+		    on choice.question = quest.id
+		 where rel.mission = #{missionId}
+		 order by rel.pos, rand()
+	</select>
+	
+	<!-- public int countAnswerChoice (@Param("missionId") String missionId); -->
 	<select id="countAnswerChoice" resultType="int">
 		select count(*)
 		  from rel_mission_question
 		 where mission = #{missionId}
-		   and answer = 1
 	</select>
 	
 	<!-- public MissionVO getMissionById(String missionId); -->

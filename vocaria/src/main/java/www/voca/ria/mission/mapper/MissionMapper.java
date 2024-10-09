@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import www.voca.ria.framework.mapper.GeneralMapper;
 import www.voca.ria.framework.model.structure.PageDTO;
 import www.voca.ria.mission.model.MissionVO;
+import www.voca.ria.mission.model.QuestionVO;
 import www.voca.ria.mission.strategy.AutomaticallyIteratingStrategy.QuestionIteratingTag;
 import www.voca.ria.mission.strategy.DirectlyChoosingStrategy.QuestionAddress;
 import www.voca.ria.party.model.AccountVO;
@@ -25,6 +26,10 @@ public interface MissionMapper extends GeneralMapper {
 			@Param("date") String dateString, @Param("page") PageDTO page);
 	public long countAllMissionTo(@Param("accountId") String accountId,
 			@Param("date") String dateString);
+	
+	
+	public List<QuestionVO> listAllQuestionIn(String missionId);
+	
 	
 	public int countAnswerChoice(@Param("missionId") String missionId);
 	

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ChoiceDTO {
+	private String missionId = null;
 	private List<String> questionIdList;
 	private List<String> chooseList;
 	
