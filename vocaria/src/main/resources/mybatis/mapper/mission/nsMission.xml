@@ -121,6 +121,7 @@
 		select count(*)
 		  from rel_mission_question
 		 where mission = #{missionId}
+		   and answer = 1
 	</select>
 	
 	<!-- public MissionVO getMissionById(String missionId); -->
@@ -163,13 +164,14 @@
 			@Param("questionIdList") List<String> questionIdList,
 			@Param("chooseList") List<String> chooseList); -->
 	<insert id="evaluate">
-		insert into rel_mission_question(mission, question, answer)
+		insert into rel_mission_question(mission, pos, question, answer)
 		select sub.*
 		  from
 		<foreach collection="questionIdList" item="questId" index="idx"
 		  	open="(" separator="union all" close=")"
 		>
 		    select #{missionId} as mission,
+		    		${idx + 1} as pos,
 		    		#{questId} as question,
 		    		choice.choice = #{chooseList[${idx}]} as answer
 		      from t_question quest
