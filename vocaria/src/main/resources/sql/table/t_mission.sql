@@ -4,6 +4,7 @@ create table t_mission(
 	maker			varchar(255),
 	reg_dt			timestamp default current_timestamp(),
 	upt_dt			timestamp default current_timestamp() on update current_timestamp(),
+	xpr_dt			timestamp,
 	viewed			tinyint
 );
 create index idx_reg_dt on t_mission(reg_dt);
