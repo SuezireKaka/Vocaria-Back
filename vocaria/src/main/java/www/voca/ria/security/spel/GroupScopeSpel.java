@@ -1,6 +1,5 @@
 package www.voca.ria.security.spel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +16,6 @@ public class GroupScopeSpel extends CommonSpel {
 	@Autowired
 	private PartyService partyService;
 	
-	private List<AccountVO> imsiList = new ArrayList<>();
-	
 	public boolean isTeachableChain(Authentication authentication,
 			String accountChain) {
 		ActVO teachableAct = new ActVO("SM");
@@ -33,26 +30,9 @@ public class GroupScopeSpel extends CommonSpel {
 		
 		List<AccountVO> studentList = partyService.listStudents(accountArray);
 		
-		List<AccountVO> filteredStudentList = studentList.stream()
-				.filter(account -> account.getRoleList().stream()
+		return studentList.stream()
+				.allMatch(account -> account.getRoleList().stream()
 						.anyMatch(role -> possibleProviderIds.contains(
-								role.getProvider().getId())))
-				.collect(Collectors.toList());
-		
-		this.imsiList = filteredStudentList;
-		
-		return filteredStudentList.size() > 0;
-	}
-	
-	public List<AccountVO> getImsiResult() {
-		List<AccountVO> result = new ArrayList<>(this.imsiList);
-		
-		clearImsi();
-		
-		return result;
-	}
-	
-	public void clearImsi() {
-		imsiList.clear();
+								role.getProvider().getId())));
 	}
 }

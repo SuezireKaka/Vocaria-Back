@@ -26,22 +26,17 @@ import www.voca.ria.mission.service.MissionService;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy;
 import www.voca.ria.mission.strategy.QuestionBuildStrategy.StrategyType;
 import www.voca.ria.party.model.AccountVO;
-import www.voca.ria.security.spel.GroupScopeSpel;
 
 @RestController
 @RequestMapping("/mission")
 public class MissionController {
 	@Autowired
 	private MissionService missionService;
-	@Autowired
-	private GroupScopeSpel spel;
 	
 	// /mission/testSpel/account1-account2-account3
 	@GetMapping("/testSpel/{accountIdChain}")
 	@PreAuthorize("@groupScopeSpel.isTeachableChain(authentication, #accountIdChain)")
 	public ResponseEntity<Boolean> buildMission(@PathVariable String accountIdChain) {
-		spel.getImsiResult();
-		 
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 	
@@ -55,7 +50,6 @@ public class MissionController {
 		Pair<List<MissionVO>, PageDTO> result =
 				missionService.listAllMissionFrom(
 						teacher.getId(), studentId, dateString + "%", pageNum);
-		spel.clearImsi();
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
@@ -69,7 +63,6 @@ public class MissionController {
 			@PathVariable int pageNum) {
 		Pair<List<MissionVO>, PageDTO> result = missionService
 				.listAllMissionTo(student.getId(), dateString + "%", pageNum);
-		spel.clearImsi();
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
@@ -81,7 +74,6 @@ public class MissionController {
 			@AuthenticationPrincipal AccountVO student,
 			@PathVariable String missionId) {
 		ExamDTO result = missionService.listAllQuestionIn(missionId);
-		spel.clearImsi();
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
@@ -102,8 +94,7 @@ public class MissionController {
 			@PathVariable String studentId,
 			@PathVariable String questionId) {
 		MissionVO result = missionService.getMissionOfStudentById(questionId);
-		spel.clearImsi();
-		
+
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
@@ -128,8 +119,6 @@ public class MissionController {
 			@RequestBody QuestionBuildStrategy strategy) throws BusinessException {
 		List<String> parsedData;
 		
-		List<AccountVO> studentsList = spel.getImsiResult();
-		
 		try {
 			parsedData = strategy.getParsedData();
 		}
@@ -137,7 +126,8 @@ public class MissionController {
 			throw new BusinessException("Invalid strategy found", ErrorCode.INVALID_STRATEGY);
 		}
 		
-		boolean result = missionService.buildMission(studentsList, strategy, parsedData);
+		boolean result = missionService.buildMission(accountIdChain,
+				strategy, parsedData);
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
