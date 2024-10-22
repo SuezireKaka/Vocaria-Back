@@ -1,5 +1,6 @@
 package www.voca.ria.mission.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,9 +84,18 @@ public class MissionService {
 		return correctNum;
 	}
 	
-	public boolean buildMission(List<AccountVO> studentsList,
+	public boolean buildMission(String studentsChain,
 			QuestionBuildStrategy strategy, List<String> parsedData)
 					throws BusinessException {
+		
+		String[] parsedStudentsArray = studentsChain.split(AccountVO.CHAIN_SEPERATOR);
+		
+		List<AccountVO> studentsList = Arrays.stream(parsedStudentsArray)
+				.map(id -> AccountVO.builder()
+						.id(id)
+						.build())
+				.collect(Collectors.toList());
+		
 		return strategy.getType() == StrategyType.AUTO
 				? buildMissionAutomatically(studentsList, parsedData)
 				: buildMissionDirectly(studentsList, parsedData);
@@ -93,6 +103,7 @@ public class MissionService {
 
 	private boolean buildMissionAutomatically(List<AccountVO> studentsList,
 			List<String> parsedData) {
+		
 		List<QuestionIteratingTag> tagList = parsedData.stream()
 				.map(QuestionIteratingTag::fromString)
 				.collect(Collectors.toList());

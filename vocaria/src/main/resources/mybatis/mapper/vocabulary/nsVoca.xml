@@ -7,6 +7,7 @@
 	<resultMap id="rmVocaVO" extends="nsEntity.rmTimeEntity"
 		type="www.voca.ria.vocabulary.model.VocaVO">
 		<result property="name" column="name" />
+		<result property="isForTeacher" column="for_teacher" />
 		<result property="introduce" column="intro" />
 		<association property="maker" columnPrefix="mkr_"
 				resultMap="www.voca.ria.party.mapper.PartyMapper.rmAccountVO" />
@@ -30,7 +31,7 @@
 	
 	<!-- public List<VocaVO> listAllVoca(@Param("page") PageDTO page); -->
 	<select id="listAllVoca" resultMap="rmVocaVO">
-		select voca.id, voca.name, voca.reg_dt, voca.upt_dt,
+		select voca.id, voca.name, voca.reg_dt, voca.upt_dt, voca.for_teacher,
 		        maker.id mkr_id, maker.nick mkr_nick
 		  from t_voca voca
 		  left outer join t_account maker

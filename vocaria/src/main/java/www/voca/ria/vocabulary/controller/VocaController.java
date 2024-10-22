@@ -45,8 +45,10 @@ public class VocaController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	// /voca/anonymous/getVocaById/0000
-	@GetMapping("/anonymous/getVocaById/{vocaId}")
+	// /voca/getVocaById/0000
+	@GetMapping("/getVocaById/{vocaId}")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')"
+			+ "&& @vocaScopeSpel.isOpenFor(authentication, #vocaId)")
 	public ResponseEntity<VocaVO> getVocaById(@PathVariable String vocaId) {
 		VocaVO result = vocaService.getVocaById(vocaId);
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -54,7 +56,8 @@ public class VocaController {
 	
 	// /voca/getChapter/0000/1
 	@GetMapping("/getChapter/{vocaId}/{chapterNum}")
-	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')")
+	@PreAuthorize("@actScopeSpel.isAbleToRunAny(authentication, '0000', 'PS')"
+			+ "&& @vocaScopeSpel.isOpenFor(authentication, #vocaId)")
 	public ResponseEntity<ChapterVO> getChapter(@PathVariable String vocaId,
 			@PathVariable int chapterNum) {
 		ChapterVO result = vocaService.getChapter(vocaId, chapterNum);

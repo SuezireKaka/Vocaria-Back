@@ -31,6 +31,8 @@ public class GroupScopeSpel extends CommonSpel {
 		List<AccountVO> studentList = partyService.listStudents(accountArray);
 		
 		return studentList.stream()
+				// 체인 내 모든 계정이
+				// 내가 가르치는 학생 역할을 하나라도 갖고 있으면 통과
 				.allMatch(account -> account.getRoleList().stream()
 						.anyMatch(role -> possibleProviderIds.contains(
 								role.getProvider().getId())));

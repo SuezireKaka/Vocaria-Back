@@ -13,6 +13,8 @@ public class VocaVO extends TimeEntity {
 	private String name;
 	private AccountVO maker;
 	
+	private boolean isForTeacher;
+	
 	private String introduce;
 	
 	private List<ChapterVO> chapterList;
