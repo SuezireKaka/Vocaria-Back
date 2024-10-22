@@ -52,9 +52,7 @@ public class SignService {
 						user.getAuthorities().stream()
 							.map(GrantedAuthority::getAuthority)
 							.collect(Collectors.toList())))
-				.roles(user.getAuthorities().stream()
-						.map(GrantedAuthority::getAuthority)
-						.collect(Collectors.toList()))
+				.roleList(user.getAuthorities())
 				.userId(user.getId())
 				.userNick(user.getNick())
 				.build();

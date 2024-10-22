@@ -1,6 +1,8 @@
 package www.voca.ria.security.model;
 
-import java.util.List;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +18,5 @@ public class SignInResultDto extends SignUpResultDto {
 	private String token;	//JWT
 	private String userId;
 	private String userNick;
-	private List<String> roles;
+	private Collection<? extends GrantedAuthority> roleList;
 }
